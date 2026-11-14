@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MazeQuest: verificar",
+      "type": "shell",
+      "command": "bash scripts/maven.sh clean verify",
+      "windows": {
+        "command": "cmd /c scripts\\maven.cmd clean verify"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$javac"
+      ]
+    },
+    {
+      "label": "MazeQuest: pruebas",
+      "type": "shell",
+      "command": "bash scripts/maven.sh test",
+      "windows": {
+        "command": "cmd /c scripts\\maven.cmd test"
+      },
+      "group": "test",
+      "problemMatcher": [
+        "$javac"
+      ]
+    },
+    {
+      "label": "MazeQuest: empaquetar",
+      "type": "shell",
+      "command": "bash scripts/maven.sh clean package",
+      "windows": {
+        "command": "cmd /c scripts\\maven.cmd clean package"
+      },
+      "problemMatcher": [
+        "$javac"
+      ]
+    }
+  ]
+}

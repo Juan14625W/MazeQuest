@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "MazeQuest · jugar / depurar",
+      "request": "launch",
+      "mainClass": "mazequest.Main",
+      "projectName": "mazequest",
+      "console": "internalConsole"
+    }
+  ]
+}
