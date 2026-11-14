@@ -1,0 +1,31 @@
+# Maven y Java
+/target/
+*.class
+*.log
+hs_err_pid*
+replay_pid*
+
+# Herramientas locales; nunca versionar credenciales ni binarios descargados
+/.tools/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Metadatos personales de IDE y sistema; .vscode compartido se conserva
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/*.log
+.vscode/.history/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporales y salidas intermedias
+*.tmp
+*.bak
+/docs/.render/
