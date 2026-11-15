@@ -29,3 +29,9 @@ Desktop.ini
 *.tmp
 *.bak
 /docs/.render/
+
+# Registros brutos de revisión; se versionan los informes Markdown
+/docs/reviews/*.jsonl
+/docs/.render/
+/output/.render/
+

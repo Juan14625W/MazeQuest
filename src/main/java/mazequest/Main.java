@@ -1,13 +1,44 @@
 package mazequest;
-/** Punto de entrada; la vista se conecta después de validar el motor. */
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import mazequest.view.GamePanel;
+
+/** Arranque de escritorio; crea y modifica componentes únicamente en el EDT. */
 public final class Main {
-    /** Impide instanciar la clase de arranque. */
-    private Main() { }
-    /**
-     * Comprueba el arranque de la base Maven.
-     * @param args argumentos reservados para diagnóstico
-     */
-    public static void main(String[] args) {
-        System.out.println("MazeQuest: base Maven preparada.");
-    }
+  /** Evita instanciar el lanzador. */
+  private Main() {}
+
+  /**
+   * Abre MazeQuest.
+   *
+   * @param args argumentos reservados
+   */
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(
+        () -> {
+          JFrame frame = new JFrame("MazeQuest: The Lost Labyrinth");
+          GamePanel panel = new GamePanel(frame::dispose);
+          frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+          frame.addWindowListener(
+              new WindowAdapter() {
+                /**
+                 * Convierte el cierre del sistema en confirmación del juego.
+                 *
+                 * @param e evento
+                 */
+                @Override
+                public void windowClosing(WindowEvent e) {
+                  panel.requestClose();
+                }
+              });
+          frame.setContentPane(panel);
+          frame.setMinimumSize(new Dimension(960, 680));
+          frame.pack();
+          frame.setLocationRelativeTo(null);
+          frame.setVisible(true);
+          panel.requestFocusInWindow();
+        });
+  }
 }
