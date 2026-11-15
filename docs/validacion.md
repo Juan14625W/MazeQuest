@@ -37,3 +37,16 @@ Las capturas muestran estados reales; no se presentan como prueba de todas las c
 - Guion propuesto de ocho minutos y 18 preguntas en `docs/sustentacion.md`. No se presenta como ensayo ya realizado.
 
 Pendientes exactos: recibir y contrastar el PDF original; completar autoría académica confirmada; revisión gráfica en Linux; verificar detención efectiva en breakpoint; ensayo humano del guion y recorrido manual exhaustivo de controles. Ninguna validación automática sustituye esos puntos.
+
+## Correcciones tras recibir la rúbrica, 15 de noviembre de 2026
+
+Este apartado actualiza los pendientes históricos anteriores. El PDF original de cuatro páginas ya se contrastó y el solicitante confirmó a Juan David Paz Rodriguez y Andrea Fernanda Sapuyez como equipo. Trazabilidad actual en [trazabilidad.md](trazabilidad.md); revisión inicial en [05-auditoria-integral.md](reviews/05-auditoria-integral.md) y cierre en [06-cierre-correcciones.md](reviews/06-cierre-correcciones.md).
+
+- Compilación limpia a las 17:13 America/Bogota, JDK 21.0.13 y Maven 3.9.11: **24 pruebas, cero fallos, errores u omisiones**. Javadoc correcto. Las tres nuevas pruebas cubren daño en el quinto paso del guion, publicación de la pista en EDT e invalidación/reinicio del controlador.
+- JAR ejecutable generado: `target/mazequest.jar`. SHA-256 de esta construcción: `8e12cbbd25f5afe2b62200ea253b3e71520f503c41bf7303b6852ab7753d2326`.
+- Helper `scripts/java-env.cmd` verificado en tres escenarios aislados: conserva JDK 25 explícito aunque exista JDK 21 local; sin JAVA_HOME selecciona JDK 21; una ruta explícita inexistente retorna código 1 con mensaje. Son comprobaciones de selección, no ejecuciones de JDK simulados.
+- Manuales regenerados con autoría, diagramas, ubicación/justificación/costos de estructuras y resultados esperados/obtenidos de 24 casos. Usuario: cuatro páginas; técnico: once. Quince páginas renderizadas e inspeccionadas, con revisión posterior de las páginas modificadas.
+- Se abrió el JAR actual en Windows y se observó inicio de El umbral, cálculo H, laboratorio T y selección de BST con 51 claves. Nueva captura real `docs/screenshots/tecnico-actual.jpg`; ya no divide la clave 74 entre líneas. La captura anterior se conserva como evidencia histórica.
+- Auditoría OpenCode de solo lectura sin hallazgos concretos en su alcance. Respuesta íntegra en [06-opencode-correcciones.md](reviews/06-opencode-correcciones.md). No se presenta como ejecución de pruebas ni inspección visual externa.
+
+Pendientes actuales: contribuciones verificables de ambos integrantes en Git; ensayo y defensa; acceso docente y envío. Integración de la rama en main sujeta a autorización. Siguen pendientes GUI de Linux, detención en breakpoint y recorrido manual exhaustivo; no son sustituidos por CI.

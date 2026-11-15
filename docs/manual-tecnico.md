@@ -3,8 +3,10 @@ MazeQuest · Estructuras de Datos
 
 Versión 1.0.0 · 15 de noviembre de 2026
 
+Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez.
+
 ## 1. Construcción y arquitectura
-Java 21, Maven, JUnit 5, Swing y Java2D. Entrada: mazequest.Main. Motor, modelos, estructuras y BFS funcionan sin ventanas. Swing queda en la entrada, el controlador y la vista.
+Java 21 (validado con 21.0.13), Maven 3.9.11, JUnit Jupiter 5.11.4, Swing y Java2D del JDK. Entrada: mazequest.Main. Motor, modelos, estructuras y BFS funcionan sin ventanas. Swing queda en la entrada, el controlador y la vista.
 
 ```text
 mvn -B -ntp clean verify javadoc:javadoc
@@ -26,6 +28,22 @@ view usa controller y modelos de consulta; controller usa engine y algorithms; e
 
 VS Code usa configuraciones portables en .vscode: extensiones Java/Maven, tareas y lanzamiento de mazequest.Main. Configurar JDK 21 localmente, sin rutas personales compartidas. Los scripts también pueden usar Java/Maven instalados en el sistema.
 
+Los scripts de Windows respetan JAVA_HOME explícito y validan java/javac. Si no está definido, buscan JDK 21 local y después usan PATH. No sustituyen una selección explícita por otro JDK instalado.
+
+<!-- pagebreak -->
+## 1.1. Diagrama de clases: aplicación
+Vista simplificada con atributos y operaciones seleccionados. Flecha continua: referencia; discontinua: dependencia o creación; rombo negro: objeto creado y gestionado por su propietario. Se omiten accesores y dependencias auxiliares para conservar legibilidad.
+
+<!-- diagram: core -->
+
+Main crea GamePanel en el EDT. Levels construye Maze; Position es un registro de fila y columna. GameStatus enumera PLAYING, WON y LOST. Palette aporta colores a la vista. GameController conserva el SearchResult publicado; BFS también recibe Maze y Position, sin depender de la interfaz.
+
+<!-- pagebreak -->
+## 1.2. Diagrama de clases: nodos
+Cada Node pertenece a su propia clase contenedora: son cinco implementaciones privadas distintas. El rombo indica propiedad de cero o más nodos; sus campos muestran los enlaces. Los nombres de operaciones se abrevian omitiendo parámetros.
+
+<!-- diagram: structures -->
+
 <!-- pagebreak -->
 ## 2. Estructuras e invariantes
 Las cinco estructuras usan nodos y referencias propios. No las sustituyen colecciones de java.util. Los arreglos de mapas, instantáneas y resultados son almacenamiento auxiliar.
@@ -38,11 +56,34 @@ Las cinco estructuras usan nodos y referencias propios. No las sustituyen colecc
 | Doble | Extremos externos nulos y enlaces vecinos recíprocos. Historial. | Extremos O(1); índice/búsqueda O(n); recorrido O(n). |
 | BST | Izquierda menor, derecha mayor; sin duplicados. Visitados BFS. | Operaciones O(h), peor O(n); recorridos O(n). |
 
+Ubicación: src/main/java/mazequest/structures/. La pila corresponde a CustomStack.java; cola, CustomQueue.java; circular, CircularLinkedList.java; doble, DoublyLinkedList.java; árbol, BinarySearchTree.java. Sus consumidores aparecen en los diagramas.
+
 Al insertar entre nodos se conserva primero el enlace al resto. Al eliminar se reparan enlaces vecinos y extremos. Las pruebas cubren vacío, singleton, índices, extremos y retirada del último elemento. El cursor circular comprueba una versión: editar la lista invalida cursores previos.
 
 En el BST, quitar una hoja libera el enlace; con un hijo se promueve ese hijo; con dos, se usa el sucesor inorden. No hay balanceo. Sus recorridos usan pila propia y no dependen de recursión profunda.
 
 Cada estructura ocupa O(n). Una instantánea contiene un índice por enemigo: T turnos con G guardianes ocupan O(T·(G+1)), además de mapa y rutas. pop es O(1), pero restaurar el turno recoloca cada cursor con seek y no es necesariamente O(1).
+
+<!-- pagebreak -->
+## 2.1. Elección y operaciones
+Pila: LIFO coincide con revertir primero el turno más reciente. Cola: FIFO conserva las capas de distancia de BFS. Circular: el enlace final-inicial representa una patrulla repetitiva sin reconstruirla. Doble: next y prev permiten consultar el historial en ambas direcciones.
+
+BST: registra claves de celdas y evita descubrirlas dos veces. Su uso como visitados, en vez de puntuaciones, vincula el árbol al algoritmo principal y permite inspeccionar sus tres recorridos. Se acepta el peor caso lineal por operación; no se presenta como alternativa más rápida que una tabla de acceso directo. El PDF permite justificar usos distintos a sus sugerencias.
+
+n es el número de nodos y h la altura del árbol. Costos temporales de peor caso salvo donde se indica; size e isEmpty son O(1) en todas las estructuras.
+
+| Estructura | Operaciones del contrato | Tiempo |
+|---|---|---|
+| Pila | push, pop, peek; forEach | O(1); recorrido O(n). |
+| Cola | enqueue, dequeue, peek; forEach | O(1); recorrido O(n). |
+| Circular | addFirst/addLast; insert; remove; get/indexOf; forEach | Extremos O(1); demás O(n), salvo remove(0) O(1). |
+| Cursor circular | value/index/advance; seek | O(1); seek O(n). |
+| Doble | addFirst/addLast; insert/remove; get/indexOf; forEach/forEachReverse | Extremos O(1); interior/búsqueda y recorridos O(n). |
+| BST | insert, contains, remove; inOrder/preOrder/postOrder | O(h), peor O(n); recorridos O(n). |
+
+En la doble, insert y remove en extremos son O(1); los índices interiores requieren localizar el nodo desde el extremo más próximo. El BST puede degenerar hasta h=n. Los recorridos iterativos usan pila auxiliar propia: O(h) nodos adicionales; las otras estructuras recorren con O(1) memoria auxiliar, excluyendo el texto producido.
+
+No se usan Stack, Queue, ArrayDeque, LinkedList, ArrayList, HashSet, HashMap, TreeSet ni TreeMap como sustitutos. Objects, excepciones, Consumer y clases de concurrencia no almacenan las estructuras académicas.
 
 <!-- pagebreak -->
 ## 3. BFS y costo real
@@ -76,20 +117,21 @@ Con daño, jugador y patrullas vuelven al inicio; cero vidas fija LOST. Sin dañ
 undo restaura jugador, vidas, contador, estado y cursores, y retira el último registro. Puede revertir WON y LOST. GameSnapshot copia el arreglo de índices al construir y consultar. Consultar el historial no cambia la partida. restart vacía pila e historial y restaura tres vidas; vista y controlador reinician reloj y pistas. Estos dos datos de sesión no son reversibles.
 
 ## 6. Laboratorio real
-![BST y controles del laboratorio en Windows.](screenshots/tecnico.jpg)
+![BST y controles del laboratorio en Windows, capturados el 15 de noviembre de 2026.](screenshots/tecnico-actual.jpg)
 
-Esta captura archivada precede al arreglo que evita dividir una clave entre líneas. No se retocó para simular otra ejecución. Pila, circular e historial muestran el motor; cola y BST proceden del último SearchResult vigente.
+Captura del JAR validado: El umbral, turno cero, pista calculada y BST con 51 claves en inorden. La clave 74 aparece completa al comenzar la segunda línea. Pila, circular e historial muestran el motor; cola y BST proceden del último SearchResult vigente.
 
 <!-- pagebreak -->
 ## 7. Validación y mantenimiento
-Compilación limpia local del 15 de noviembre de 2026 con Java 21.0.13: 21 pruebas, cero fallos, errores y omisiones; Javadoc correcto. Evidencia en docs/validacion.md e informes actuales en target/surefire-reports.
+Compilación limpia local del 15 de noviembre de 2026 con Java 21.0.13: 24 pruebas, cero fallos, errores y omisiones; Javadoc correcto. Evidencia en docs/validacion.md e informes actuales en target/surefire-reports.
 
 | Clase | Pruebas | Evidencia principal |
 |---|---|---|
 | StructuresTest | 8 | LIFO, FIFO, enlaces, cursores, índices, duplicados y eliminaciones. |
 | BreadthFirstSearchTest | 4 | Ruta mínima, inalcanzable, misma celda, extremos y copias. |
-| GameEngineTest | 7 | Colisiones, vidas, historial, reinicio, reversión y mapas. |
+| GameEngineTest | 8 | Colisiones, vidas, historial, reinicio, reversión, mapas y guion. |
 | PlayableLevelsTest | 2 | Intercambio real y victoria con enemigos en los tres niveles. |
+| GameControllerTest | 2 | Publicación de pistas en EDT e invalidación/reinicio. |
 
 El verificador explora celda y fase, reconstruye secuencias y las reproduce en GameEngine: El umbral gana en 16 turnos, Las galerías en 26 y El santuario en 32, todos con tres vidas. Son resultados automatizados, no partidas humanas ni mediciones de velocidad.
 
@@ -99,4 +141,51 @@ Para agregar mapas, respetar rectangularidad, símbolos, entrada/salida únicas 
 
 Los informes reales de OpenCode se conservan en docs/reviews. Los manuales se generan desde Markdown mediante scripts/build_manuals.py y usan capturas de docs/screenshots.
 
-Pendientes externos: PDF académico original, datos de autoría, GUI en Linux y detención efectiva en breakpoint. No se afirma cobertura porcentual ni revisión manual completa de todas las pantallas.
+El PDF original de la profesora (cuatro páginas) se contrastó el 15 de noviembre. El equipo está confirmado. Pendientes: contribuciones reales identificables de ambos en Git y ensayo de defensa; integración a main sujeta a autorización. GUI en Linux y detención efectiva en breakpoint siguen sin verificarse. No se afirma cobertura porcentual ni revisión manual completa de todas las pantallas.
+
+<!-- pagebreak -->
+## 8. Casos: estructuras
+Cada fila identifica un método de StructuresTest, en src/test/java/mazequest/structures/. «Obtenido» corresponde a sus aserciones ejecutadas en la compilación limpia de 24 pruebas, no a observaciones inventadas ni a una cobertura porcentual.
+
+| Caso / método | Resultado esperado | Obtenido |
+|---|---|---|
+| stackContract | Insertar 1,2,3; retirar 3,2,1. Vacío lanza NoSuchElementException; admite null y reutilización. | Secuencia 321 y contratos verificados. |
+| queueContract | Insertar 1,2,3; retirar 1,2,3. Vacío lanza excepción; último retiro limpia extremos. | Secuencia 123, vacío y reutilización correctos. |
+| circularInsertAndCycle | Inserciones producen 0123; 16 avances repiten 0,1,2,3. Editar invalida cursor previo. | Ciclo, índices y excepciones coinciden. |
+| circularRemove | Retirar primero, medio y último conserva ciclo 1,3; retirar singleton deja vacío. | Ocho avances alternan 1,3; vacío correcto. |
+| doublyLinks | Recorridos 01234 y 43210; tras eliminar, 13 y 31; extremos e índices válidos. | Ambas direcciones y errores verificados. |
+| treeTraversals | Con 4,2,6,1,3,5,7: inorden 1234567, preorden 4213657, posorden 1325764; duplicado rechazado. | Tres secuencias exactas; tamaño siete. |
+| treeRemoveCases | Quitar hoja, nodo con hijo y raíz con dos hijos produce 23568; después se vacía. | Sucesor y enlaces correctos; tamaño cero. |
+| degenerateTree | Insertar 0..1999; recorrer 2000 claves; eliminar 1000 deja 1999 nodos. | Recuento exacto y recorrido sin recursión. |
+
+<!-- pagebreak -->
+## 9. Casos: BFS y controlador
+Los cuatro primeros métodos pertenecen a algorithms/BreadthFirstSearchTest.java; los dos últimos, a controller/GameControllerTest.java, bajo src/test/java/mazequest/.
+
+| Caso / método | Resultado esperado | Obtenido |
+|---|---|---|
+| knownShortestPath | Mapa S.#.E / .....: rodear el muro en seis pasos, sin repetir exploración; copias defensivas. | Distancia seis, pasos adyacentes y copias correctas. |
+| unreachable | Mapa S#E: no hay ruta; distancia -1 y una celda visitada. | found=false, -1 y un visitado. |
+| sameCell | Origen y destino iguales: distancia cero y ruta de una celda. | Cero y únicamente el origen. |
+| invalidPositions | Rechazar origen nulo, fuera de rango y destino muro o fuera del mapa. | IllegalArgumentException en los cuatro casos. |
+| hintPublishesOnEdt | Publicar ruta jugador-salida en EDT; searching=false y una pista completada. | Callback en EDT, extremos correctos, hints=1. |
+| movementAndRestartInvalidateHints | Muro conserva pista; paso válido la descarta; deshacer restaura turno; reinicio limpia ayudas y registros. | Referencias, contadores, pila e historial coinciden. |
+
+El controlador se prueba con SwingUtilities y una espera limitada fuera del EDT, sin abrir ventanas. Estos casos verifican publicación e invalidación de un resultado completado; no equivalen a probar exhaustivamente todas las carreras de cancelación ni los controles gráficos.
+
+<!-- pagebreak -->
+## 10. Casos: motor y niveles
+Métodos en engine/GameEngineTest.java; las dos últimas filas corresponden a engine/PlayableLevelsTest.java, bajo src/test/java/mazequest/.
+
+| Caso / método | Resultado esperado | Obtenido |
+|---|---|---|
+| collisionAndUndo | Choque pierde una vida y reaparece; deshacer restaura jugador, enemigo, vidas y turno. | Estado completo restaurado. |
+| defeatRestart | Tres choques terminan en LOST; deshacer revierte derrota; reiniciar deja tres vidas y registros vacíos. | Derrota, reversión y reinicio correctos. |
+| victoryAndHistory | Llegar a salida fija WON; movimiento posterior no altera estado; deshacer revierte victoria. | Victoria, historial y reversión verificados. |
+| incomingSwapAndMultiple | Entrada enemiga y coincidencia de varios guardianes causan como máximo un daño por turno. | Dos vidas restantes en ambos escenarios. |
+| circularTurnsAndRestoration | Avance circular y deshacer deben conservar la fase exacta de patrulla. | Índices y posiciones coinciden. |
+| levelsReachable | Los tres niveles tienen una ruta estática de entrada a salida. | found=true en los tres. |
+| mapValidation | Rechazar mapas o patrullas inválidos y aislar copias del mapa y de fases en GameSnapshot. | Excepciones y copias defensivas verificadas. |
+| presentationCollisionOccursOnFifthStep | En El umbral, cuatro pasos a derecha conservan tres vidas; quinto causa daño; undo vuelve al cuarto. | Vidas 3, luego 2, luego 3; posiciones restauradas. |
+| allLevelsCanBeWonWithEnemies | Encontrar y reproducir victorias teniendo en cuenta fases enemigas. | WON con tres vidas en 16, 26 y 32 turnos. |
+| actualSwapIsCollision | Intercambiar jugador y guardián causa daño; deshacer revierte el intercambio. | Colisión real y restauración correctas. |

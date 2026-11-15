@@ -1,0 +1,21 @@
+# Revisión OpenCode de las correcciones
+
+Fecha: 15 de noviembre de 2026. Sesión real: ses_e1eb37bdbffeCEEgHxbO1GWPJa.
+Agente plan, sin --auto; solo lectura. Ayuda instalada consultada antes de ejecutar.
+
+## Respuesta íntegra
+
+## Auditoría acotada (solo lectura)
+
+**Alcance revisado:** `git diff` (trabajo y staged), `git status`, `scripts/java-env.cmd`, `scripts/class_diagrams.py`, `src/test/java/mazequest/controller/GameControllerTest.java`, `docs/manual-tecnico.md`, y archivos de implementación/documentación modificados relacionados para contrastar coherencia (p. ej. `GameController`, `BreadthFirstSearch`, `SearchResult`, `GameEngine`, `Enemy`, `Maze`, `Levels`, `PlayableLevelsTest`, scripts y docs).
+
+**Hallazgos concretos:** ausencia de hallazgos concretos en el alcance revisado.
+
+**Comprobaciones de coherencia realizadas (estáticas):**
+- **`scripts/java-env.cmd` / selección de JDK (scripts/java-env.cmd:3-20; invocado en scripts/maven.cmd:5-6, scripts/dev.cmd:5-6):** respeta `JAVA_HOME` explícito; si está definido lo valida y ante ausencia de `bin\java.exe` o `bin\javac.exe` emite error claro y termina con código 1. Si no está definido, busca un JDK 21 local en `.tools\jdk\jdk-21*` con `java`/`javac`; si no, exige `java` y `javac` en `PATH`. Solo ante `JAVA_HOME` válido antepone `%JAVA_HOME%\bin%` al `PATH` del proceso. Coherente con lo documentado (README.md:35, docs/manual-tecnico.md:31).
+- **`scripts/class_diagrams.py` / diagramas:** define `core_diagram()` y `structures_diagram()` usados como marcadores `<!-- diagram: core -->` y `<!-- diagram: structures -->` en docs/manual-tecnico.md:37,45 e integrados en scripts/build_manuals.py:8,85-88; las relaciones y componentes representados (p. ej. controlador con motor/búsqueda, estructuras con nodos privados y usos) son coherentes con la implementación inspeccionada.
+- **Contratos Javadoc añadidos/modificados:** las excepciones documentadas son coherentes con el comportamiento observable en código (`Levels.get` lanza `IllegalArgumentException` para índice desconocido, model/Levels.java:60; `Enemy` requiere patrulla no nula/no vacía y `restore` delega en `seek`, model/Enemy.java:14-52; `CircularLinkedList.Cursor` documenta `ConcurrentModificationException`/`IndexOutOfBoundsException` acorde a `check()`/`seek()`, structures/CircularLinkedList.java:199-246; accesos por índice y validaciones en `GameEngine`/`Maze`/`GameSnapshot` acordes a los `@throws` añadidos).
+- **Pruebas nuevas/modificadas vs aserciones y documentación (24 pruebas declaradas):** `GameControllerTest` (2) verifica publicación en EDT, ruta jugador-salida y conteo de pistas, e invalidación por movimiento/muro, `undo` y `restart` (controller/GameControllerTest.java:48-86). `GameEngineTest.presentationCollisionOccursOnFifthStep` reproduce 4 pasos sin daño, 5.º con daño/reaparición y `undo` restaurando turno/vidas/posiciones (engine/GameEngineTest.java:175-191). `PlayableLevelsTest` conserva los 2 casos documentados (victoria con enemigos en los tres niveles y colisión por intercambio). Las tablas de docs/manual-tecnico.md:126-191 (conteos 8/4/8/2/2, nombres de métodos y resultados esperados/obtenidos) son coherentes con las aserciones presentes en los archivos de prueba revisados y con la lógica inspeccionada; no se ejecutaron pruebas en esta auditoría.
+- **Costos y resultados documentados:** la descripción de BFS/costos `O(A + (V+E)h + F²)`, peor `O(A²)` en cuadrícula y espacio `O(A)` (algorithms/BreadthFirstSearch.java:10-15, docs/manual-tecnico.md:89-103) y las complejidades/invariantes de estructuras (docs/manual-tecnico.md:48-86) son coherentes con la implementación inspeccionada. Los guiones/resultados de ensayo citados (p. ej. daño al 5.º paso y `undo`, docs/sustentacion.md:21) coinciden con la prueba automatizada correspondiente.
+
+**Límites (no verificados aquí):** no se ejecutó compilación, JUnit ni Javadoc; no se realizó revisión visual de PDFs; no se atribuye evidencia no observada. Los binarios `output/pdf/manual-tecnico.pdf` y `output/pdf/manual-usuario.pdf` figuran modificados en el diff pero no fueron inspeccionados visualmente. Hay archivos no rastreados fuera del alcance principal (`docs/reviews/05-auditoria-integral.md`, `docs/reviews/05-opencode-rubrica.md`, `scripts/__pycache__/`) no auditados.

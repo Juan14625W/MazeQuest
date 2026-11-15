@@ -5,6 +5,7 @@ import re
 from xml.sax.saxutils import escape
 
 import pymupdf
+from class_diagrams import core_diagram, structures_diagram
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -81,6 +82,11 @@ def markdown_flowables(source):
             continue
         if line == "<!-- pagebreak -->":
             story.append(PageBreak())
+        elif line == "<!-- diagram: core -->":
+            story.append(core_diagram())
+            story.append(Spacer(1, 12))
+        elif line == "<!-- diagram: structures -->":
+            story.append(structures_diagram())
         elif line.startswith("# "):
             story.append(Paragraph(inline(line[2:]), STYLES["TitleES"]))
         elif line.startswith("## "):
@@ -146,7 +152,8 @@ def build(name):
     doc = SimpleDocTemplate(str(target), pagesize=A4, rightMargin=48,
                             leftMargin=48, topMargin=55, bottomMargin=49,
                             title=source.read_text(encoding="utf-8").splitlines()[0][2:],
-                            author="MazeQuest", subject="Documentación del proyecto académico")
+                            author="Juan David Paz Rodriguez; Andrea Fernanda Sapuyez",
+                            subject="Documentación del proyecto académico")
     doc.build(markdown_flowables(source), canvasmaker=ManualCanvas)
     with pymupdf.open(target) as pdf:
         for number, page in enumerate(pdf, 1):

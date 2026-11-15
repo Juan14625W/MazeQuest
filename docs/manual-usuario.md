@@ -3,6 +3,8 @@ MazeQuest · The Lost Labyrinth
 
 Versión 1.0.0 · 15 de noviembre de 2026
 
+Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez.
+
 ## 1. Preparar y abrir el juego
 Alcanza la salida dorada evitando guardianes. Cada nivel empieza con tres vidas. Puedes consultar pistas, revisar estructuras internas y deshacer decisiones.
 
@@ -75,7 +77,7 @@ Esc abre la pausa; «Continuar» o Esc la cierran. Desde la pausa puedes volver 
 ## 6. Laboratorio de estructuras
 T abre el laboratorio. Selecciona Pila, Cola BFS, Circular, Historial o BST. La rueda desplaza contenido largo. T, Esc o «Volver al juego» regresan a la partida.
 
-![BST real. Captura histórica anterior al arreglo del salto de línea entre claves.](screenshots/tecnico.jpg)
+![BST real, capturado en Windows el 15 de noviembre de 2026, con claves completas entre líneas.](screenshots/tecnico-actual.jpg)
 
 Pila muestra estados para deshacer; Circular, rutas y cursores; Historial alterna las dos direcciones de recorrido. Cola y BST necesitan una búsqueda: «Ejecutar BFS» permite calcularla aquí.
 
@@ -91,4 +93,4 @@ La cola mostrada es una instantánea de su máxima ocupación, no la cola final 
 | La pista cruza un guardián | Es estática: observar la patrulla antes de avanzar. |
 | Deshacer no disponible | No existe un turno válido previo o se acaba de reiniciar. |
 
-La ejecución gráfica observada corresponde a Windows. CI también pasó en Ubuntu, pero no verifica su presentación gráfica. Las capturas reales archivadas el 14 de noviembre no documentan una partida manual completa.
+La ejecución gráfica observada corresponde a Windows. CI también pasó en Ubuntu, pero no verifica su presentación gráfica. Las capturas reales del 14 y 15 de noviembre no documentan una partida manual completa.

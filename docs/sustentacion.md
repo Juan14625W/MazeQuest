@@ -2,6 +2,8 @@
 
 Guion para ensayar; no es una exposición ya realizada. Preparar JAR, proyecto en VS Code e informes de prueba. Evitar descargas durante la presentación.
 
+Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez. Distribuir la demostración entre ambos, pero ensayar también intercambiando papeles: cada integrante debe poder explicar cualquier parte del código.
+
 | Tiempo | Demostración y explicación |
 |---|---|
 | 0:00-0:45 | Presentar objetivo, tres niveles y tres vidas. Abrir El umbral. |
@@ -16,7 +18,7 @@ Guion para ensayar; no es una exposición ya realizada. Preparar JAR, proyecto e
 
 ## Ensayo de daño y deshacer
 
-Desde El umbral recién iniciado, avanzar seis veces a la derecha dejando terminar cada animación. La sexta entrada coincide con el guardián. Pulsar Z y revisar la restauración. Confirmar esta secuencia durante el ensayo con el JAR de entrega; está derivada de las rutas del código, no registrada como ensayo humano completado.
+Desde El umbral recién iniciado, avanzar **cinco veces a la derecha**, dejando terminar cada animación. Los cuatro primeros pasos conservan tres vidas; el quinto causa daño, deja dos vidas y devuelve al jugador a la entrada. Pulsar Z inmediatamente: vuelven tres vidas, turno cuatro y las posiciones anteriores del jugador y del guardián. La prueba `GameEngineTest.presentationCollisionOccursOnFifthStep` reproduce y verifica esa secuencia. El ensayo humano completo sigue pendiente.
 
 ## Preguntas técnicas
 
@@ -37,8 +39,16 @@ Desde El umbral recién iniciado, avanzar seis veces a la derecha dejando termin
 15. **¿Por qué SwingWorker y Timer?** Cálculo fuera del EDT, publicación en él y repintados sin bloquear. El reloj no mueve enemigos.
 16. **¿Qué demuestra jugabilidad?** Secuencias con fase reproducidas contra GameEngine ganan los tres niveles sin perder vidas.
 17. **¿Colecciones estándar?** No sustituyen las estructuras. Los arreglos son auxiliares para mapas, predecesores e instantáneas.
-18. **¿Qué falta verificar?** PDF académico, autoría, GUI de Linux y breakpoint. CI sin ventanas no reemplaza revisión gráfica.
+18. **¿Qué falta verificar?** Contribuciones reales de ambos en Git, ensayo de la defensa, GUI de Linux y breakpoint. El PDF académico ya se contrastó y el equipo está confirmado. CI sin ventanas no reemplaza revisión gráfica.
+
+## Defensa individual y cambio en vivo (doce minutos)
+
+La profesora reserva doce minutos para preguntas y exige que cualquiera explique estructuras, reglas y código, además de realizar una modificación pequeña. Practicar ambos los 18 puntos anteriores, sin limitar a cada persona a «su parte».
+
+Ensayo sugerido: cuatro minutos para dibujar enlaces y eliminar un nodo del BST; cuatro para seguir un turno completo y su deshacer; cuatro para una modificación pequeña con compilación y prueba. Por ejemplo, cambiar una etiqueta de la ayuda y verificarla, o añadir un caso límite de una estructura. Este reparto es una propuesta de práctica, no una agenda impuesta por la profesora.
+
+Antes de presentar: confirmar acceso privado de la docente, abrir ambos PDF y el JAR, comprobar el proyector y ensayar con cronómetro. Andrea debe hacer y registrar su contribución real con su propia identidad; no se simulan commits ni se reescribe la autoría existente.
 
 ## Entrega
 
-Distribuir target/mazequest.jar y ambos manuales de output/pdf. Conservar código y evidencia en el repositorio privado. Completar datos académicos con información confirmada y contrastar la rúbrica original antes de declarar la entrega final.
+Distribuir target/mazequest.jar y ambos manuales de output/pdf. Conservar código y evidencia en el repositorio privado. El equipo y la rúbrica original ya están incorporados; verificar los pendientes de trazabilidad.md antes de entregar.

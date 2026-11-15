@@ -4,7 +4,7 @@ Videojuego académico de laberintos para Estructuras de Datos, desarrollado con 
 
 ## Estado verificable
 
-Versión jugable con tres niveles, interfaz Swing/Java2D y cinco estructuras propias. Repositorio privado con primer commit remoto `896c34b` conservado. Validación limpia del 15 de noviembre de 2026: **21 pruebas, cero fallos, errores y omisiones**, con Java 21.0.13 en Windows; Javadoc correcto.
+Versión jugable con tres niveles, interfaz Swing/Java2D y cinco estructuras propias. Repositorio privado con primer commit remoto `896c34b` conservado. Validación limpia del 15 de noviembre de 2026: **24 pruebas, cero fallos, errores y omisiones**, con Java 21.0.13 en Windows; Javadoc correcto.
 
 [CI del código base 2f9d04b](https://github.com/Juan14625W/MazeQuest/actions/runs/43664777093) pasó en Ubuntu/Windows con Java 21/25. La revisión gráfica registrada se realizó en Windows. Evidencias y límites en [validación](docs/validacion.md).
 
@@ -12,7 +12,7 @@ Versión jugable con tres niveles, interfaz Swing/Java2D y cinco estructuras pro
 
 Tres niveles, turnos, enemigos con patrullas circulares, tres vidas, deshacer completo, pistas BFS, historial bidireccional y panel técnico con datos reales.
 
-Las cinco estructuras se implementarán con nodos propios: pila, cola, lista circular, lista doblemente enlazada y árbol binario de búsqueda. No se permiten colecciones del lenguaje como sustitutos.
+Las cinco estructuras están implementadas con nodos propios: pila, cola, lista circular, lista doblemente enlazada y árbol binario de búsqueda. No se usan colecciones del lenguaje como sustitutos.
 
 ## Compilar y ejecutar
 
@@ -31,6 +31,8 @@ java -jar target/mazequest.jar
 ```
 
 También se puede usar `mvn -B -ntp clean verify javadoc:javadoc` directamente. El JAR se genera en `target/mazequest.jar`; la API, en `target/reports/apidocs/index.html`. No se versionan compilados ni herramientas descargadas. No se necesita Python para jugar.
+
+Los scripts de Windows respetan un `JAVA_HOME` explícito y comprueban que contenga `java` y `javac`. Si falta, buscan un JDK 21 en `.tools/jdk/`; finalmente usan el `PATH`. Un `JAVA_HOME` inválido produce un error claro. No cambian la configuración permanente del equipo.
 
 ## Controles y reglas
 
@@ -69,13 +71,18 @@ Para regenerar los manuales, instalar `scripts/requirements-docs.txt` en un ento
 
 ## Requisitos académicos
 
-Fuente disponible: instrucciones del solicitante. El PDF original no está presente; queda pendiente contrastarlo, completar autoría, revisar la GUI en Linux y confirmar el breakpoint. No se declara cumplimiento de requisitos no recibidos.
+Contrastado el 15 de noviembre con las cuatro páginas de «Proyecto final – Estructuras de Datos.pdf», suministrado por el solicitante. La [trazabilidad](docs/trazabilidad.md) distingue requisitos de la profesora y compromisos internos. El manual técnico incorpora diagramas de clases, justificación de estructuras, complejidades y casos con resultado esperado y obtenido.
+
+Pendientes de entrega: contribuciones reales identificables de ambos integrantes en Git, ensayo de ocho minutos y defensa individual de doce minutos. La integración de esta rama en `main` requiere autorización. La GUI de Linux y la detención en un breakpoint de VS Code siguen sin verificarse.
 
 Entrega indicada: 20 de noviembre de 2026, 18:00, America/Bogota.
 
 ## Autoría
 
-Datos académicos de autores pendientes de confirmación. La identidad de Git se conserva sin atribuir autoría académica ni simular contribuciones. Desarrollo asistido por Codex; las revisiones de OpenCode se identificarán únicamente cuando se ejecuten.
+- Juan David Paz Rodriguez.
+- Andrea Fernanda Sapuyez.
+
+Equipo académico confirmado por el solicitante. La identidad de Git se conserva: indicar el equipo no demuestra contribuciones de ambos en el historial. Desarrollo asistido por Codex; las revisiones reales de OpenCode están identificadas en `docs/reviews/`.
 
 ## Acceso docente
 

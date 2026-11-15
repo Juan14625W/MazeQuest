@@ -1,5 +1,5 @@
 # Arquitectura y reglas
-Diseño inicial basado en el prompt; PDF original no disponible.
+Diseño contrastado con el PDF original de la profesora el 15 de noviembre de 2026. Diagramas de clases y nodos en el manual técnico; requisitos y evidencia en trazabilidad.md.
 
 ## Dependencias
 view → controller → engine → model y structures. algorithms → model y structures.

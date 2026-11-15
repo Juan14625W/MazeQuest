@@ -35,3 +35,7 @@ Desktop.ini
 /docs/.render/
 /output/.render/
 
+# Caché del generador de documentación
+__pycache__/
+*.pyc
+
