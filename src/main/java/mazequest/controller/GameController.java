@@ -21,7 +21,7 @@ public final class GameController {
   /**
    * Recibe notificación para repintar en el EDT.
    *
-   * @param changed callback de vista
+   * @param changed callback no nulo de vista; las acciones públicas se invocan en el EDT
    */
   public GameController(Runnable changed) {
     this.changed = changed;
@@ -30,7 +30,8 @@ public final class GameController {
   /**
    * Abre nivel limpio.
    *
-   * @param level índice de nivel
+   * @param level índice de nivel entre 0 (incluido) y Levels.count() (excluido)
+   * @throws IllegalArgumentException si el nivel no existe
    */
   public void start(int level) {
     invalidate();

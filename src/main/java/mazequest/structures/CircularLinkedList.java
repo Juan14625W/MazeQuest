@@ -206,13 +206,18 @@ public final class CircularLinkedList<T> {
      * Consulta O(1).
      *
      * @return dato actual
+     * @throws ConcurrentModificationException si se modificó la lista después de crear el cursor
      */
     public T value() {
       check();
       return current.value;
     }
 
-    /** Avanza por next, incluso último→primero, O(1). */
+    /**
+     * Avanza por next, incluso último→primero, O(1).
+     *
+     * @throws ConcurrentModificationException si se modificó la lista después de crear el cursor
+     */
     public void advance() {
       check();
       current = current.next;
@@ -223,6 +228,7 @@ public final class CircularLinkedList<T> {
      * Índice para instantáneas.
      *
      * @return posición actual
+     * @throws ConcurrentModificationException si se modificó la lista después de crear el cursor
      */
     public int index() {
       check();
@@ -234,6 +240,7 @@ public final class CircularLinkedList<T> {
      *
      * @param index posición
      * @throws IndexOutOfBoundsException posición inválida
+     * @throws ConcurrentModificationException si se modificó la lista después de crear el cursor
      */
     public void seek(int index) {
       check();

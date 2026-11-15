@@ -21,6 +21,7 @@ public record GameSnapshot(
    * @param moves turnos
    * @param status estado
    * @param enemies índices
+   * @throws NullPointerException si enemies es nulo
    */
   public GameSnapshot {
     enemies = enemies.clone();
