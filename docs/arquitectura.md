@@ -28,7 +28,7 @@ SearchResult conserva ruta, orden de exploración y una instantánea real de la 
 Pila/cola O(1) por operación, O(n) espacio.
 Listas: insertar extremos O(1), índice/búsqueda O(n).
 BST no balanceado O(h), peor O(n) para buscar/insertar/eliminar; recorridos O(n).
-BFS O((V+E)h), peor O(V²) en cuadrícula; espacio O(V). No se promete O(V+E).
+BFS O(A+(V+E)h+F²), peor O(A²) en cuadrícula; espacio O(A). A es el área del tablero, V las celdas descubiertas, h la altura del BST y F la máxima frontera. F² contempla copias diagnósticas al crecer el máximo de cola. No se promete O(V+E).
 
 ## Verificación
 Cada fase necesita compilación y pruebas ejecutadas. La entrega requiere JAR real, GUI revisada, manuales PDF con capturas reales y guion. Registrar explícitamente plataformas y requisitos no verificados.
