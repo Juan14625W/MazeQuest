@@ -22,4 +22,4 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
       - name: Compilar, probar y comprobar Javadoc
-        run: mvn -B -ntp -Dmaven.compiler.release=${{ matrix.java }} clean verify javadoc:javadoc
+        run: mvn -B -ntp "-Dmaven.compiler.release=${{ matrix.java }}" clean verify javadoc:javadoc
