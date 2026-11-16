@@ -63,3 +63,23 @@ Pendientes actuales: contribuciones verificables de ambos integrantes en Git; en
 - El JAR abrió el menú en Windows. El primer intento de interacción se interrumpió mediante Escape físico del usuario; el segundo encontró el error de automatización `failed to activate captured window`, aunque el proceso seguía activo y respondía. Esto acredita el arranque, no una prueba gráfica completa de las funciones adaptadas. Las capturas anteriores conservan sus fechas reales.
 
 Los pendientes académicos de entrega y las verificaciones de otras plataformas indicados arriba no se consideran resueltos por esta refactorización.
+
+## Continuación desde la nueva carpeta, 16 de noviembre de 2026
+
+La carpeta 1c15 estaba limpia en el commit base 2f9d04b. Se creó codex/cierre-academico desde a9e5cf7, conservando el otro worktree y main. Se ejecutó de nuevo `mvn -B -ntp clean verify javadoc:javadoc` para generar el JAR local: BUILD SUCCESS, 27 pruebas sin fallos, errores u omisiones y Javadoc correcto, JDK 21.0.13. La salida terminó a las 12:00 America/Bogota; no se usa su duración anómala como métrica. SHA-256 del nuevo JAR: `7a8c29e1b6fe05091807c3046ba51fbab9ff5827f799bb774bb3aae49a519a11`.
+
+La [ejecución CI 43801185433](https://github.com/Juan14625W/MazeQuest/actions/runs/43801185433), asociada a a9e5cf7, completó con success sus cuatro trabajos Ubuntu/Windows y Java 21/25, incluidos compilación, pruebas y Javadoc.
+
+La nueva sesión gráfica sí permitió iniciar y controlar la partida. Tras entrada manual del usuario, se observó Las galerías en turno cero. Se ejecutó un paso a derecha: jugador de (1,1) a (1,2), ambos guardianes avanzaron y apareció el registro. Z restauró jugador, ambos guardianes, turno cero e historial vacío. Luego dos pasos a derecha dejaron turno dos, tres vidas y jugador en (1,3). H calculó una pista de 24 pasos y la dibujó hasta la salida. Captura real de ese estado: [juego-academico.jpg](screenshots/juego-academico.jpg).
+
+Posteriormente se detectaron entradas manuales; se observó turno 46 y dos vidas, sin atribuir a Codex la secuencia intermedia. Las cancelaciones de entrada de la herramienta protegen las acciones del usuario y no se presentan como fallos del juego. Esta evidencia actualiza la limitación anterior de arranque, sin convertir la sesión en una prueba exhaustiva de todas las pantallas.
+
+Tras la entrega del control por el usuario se observó El santuario en turno cero. Se ejecutaron dos pasos a derecha y se abrió T. Comprobaciones visuales realizadas:
+
+- Pila: dos estados reversibles; T1 (1,2), vidas 3, antes de T0 (1,1), vidas 3.
+- Circular: tres patrullas, cada cursor en índice 2; posiciones (1,11), (7,16) y (11,7), con sus rutas cerradas visibles.
+- Historial: dos movimientos en orden #1, #2; «Ver hacia atrás» mostró #2, #1 sin cambiar la partida.
+- Cola: «Ejecutar BFS» produjo una frontera máxima de nueve elementos y 135 celdas descubiertas. Se mostró como instantánea histórica, no cola actual.
+- BST: 135 claves, fórmula fila * 21 + columna. Se alternaron inorden, preorden y posorden; las secuencias cambiaron y permanecieron legibles. Captura real del último estado: [tecnico-academico.jpg](screenshots/tecnico-academico.jpg).
+
+La prueba gráfica de las funciones afectadas queda realizada en Windows. Los órdenes exactos se verifican además mediante JUnit; una inspección visual de 135 claves no sustituye esas aserciones. No se afirma haber recorrido manualmente todas las pantallas de victoria/derrota ni toda combinación de controles. El juego queda abierto en el laboratorio.
