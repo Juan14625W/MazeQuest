@@ -183,6 +183,30 @@ class StructuresTest {
     assertThrows(IndexOutOfBoundsException.class, () -> l.remove(-1));
   }
 
+  /** Quitar cabecera debe limpiar el enlace anterior; quitar último debe limpiar el siguiente. */
+  @Test
+  void doublyEndpointsAfterRemoval() {
+    DoublyLinkedList<Integer> lista = new DoublyLinkedList<>();
+    lista.addLast(11);
+    lista.addLast(8);
+    assertEquals(11, lista.remove(0));
+    StringBuilder atras = new StringBuilder();
+    lista.forEachReverse(atras::append);
+    assertEquals("8", atras.toString());
+    lista.addFirst(23);
+    assertEquals(8, lista.remove(1));
+    StringBuilder adelante = new StringBuilder();
+    lista.forEach(adelante::append);
+    assertEquals("23", adelante.toString());
+    assertEquals(23, lista.remove(0));
+    assertTrue(lista.isEmpty());
+    lista.addLast(17);
+    lista.addFirst(10);
+    atras.setLength(0);
+    lista.forEachReverse(v -> atras.append(v).append(" "));
+    assertEquals("17 10 ", atras.toString());
+  }
+
   /** Comprueba secuencias exactas y duplicados ignorados. */
   @Test
   void treeTraversals() {

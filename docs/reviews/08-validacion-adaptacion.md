@@ -19,3 +19,9 @@ Comando: `mvn -B -ntp -Dtest=StructuresTest,BreadthFirstSearchTest,PlayableLevel
 Cabecera y ultimo explícitos; inserciones separadas; Nodo/dato/sig; búsqueda y recorrido con do-while. Se conserva el cursor de patrulla y su control de versión. Nueva prueba circularTwoNodesAndCursorInvalidation: quitar cabecera de dos nodos conserva el otro, su ciclo y fase cero; los cuatro accesos a un cursor antiguo fallan después de editar la ruta. Se comprueban también último, vacío y reutilización.
 
 Comando: `mvn -B -ntp -Dtest=StructuresTest,GameEngineTest,PlayableLevelsTest,GameControllerTest test javadoc:javadoc`. Resultado 16/11/2026 03:16: 21 pruebas, cero fallos/errores/omisiones; Javadoc correcto. Fases, daño, deshacer y victorias 16/26/32 con tres vidas permanecen correctos.
+
+## Lista doble
+
+Nodo/dato/sig/ant e inicio/fin/cantidad explícitos. Inserción interior muestra las cuatro referencias y eliminación separa anterior/actual/siguiente. Se conserva búsqueda desde el extremo próximo y la API del historial. Nueva prueba doublyEndpointsAfterRemoval verifica que no se vuelva a visitar un nodo eliminado al recorrer desde el extremo opuesto y permite reutilizar la lista vaciada.
+
+Comando: `mvn -B -ntp -Dtest=StructuresTest,GameEngineTest,PlayableLevelsTest,GameControllerTest test javadoc:javadoc`. Resultado 16/11/2026 03:24: 22 pruebas, cero fallos/errores/omisiones; Javadoc correcto. Historial en ambas direcciones, deshacer y victoria/derrota mantienen sus contratos.
