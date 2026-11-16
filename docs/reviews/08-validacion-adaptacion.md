@@ -25,3 +25,11 @@ Comando: `mvn -B -ntp -Dtest=StructuresTest,GameEngineTest,PlayableLevelsTest,Ga
 Nodo/dato/sig/ant e inicio/fin/cantidad explícitos. Inserción interior muestra las cuatro referencias y eliminación separa anterior/actual/siguiente. Se conserva búsqueda desde el extremo próximo y la API del historial. Nueva prueba doublyEndpointsAfterRemoval verifica que no se vuelva a visitar un nodo eliminado al recorrer desde el extremo opuesto y permite reutilizar la lista vaciada.
 
 Comando: `mvn -B -ntp -Dtest=StructuresTest,GameEngineTest,PlayableLevelsTest,GameControllerTest test javadoc:javadoc`. Resultado 16/11/2026 03:24: 22 pruebas, cero fallos/errores/omisiones; Javadoc correcto. Historial en ambas direcciones, deshacer y victoria/derrota mantienen sus contratos.
+
+## Árbol y validación limpia de las cinco estructuras
+
+Nodo/info/izq/der y raiz; inserción por comparación con actual/anterior (equivalentes a q/p). Buscar y eliminar conservan sus contratos; eliminación explica hoja, un hijo y sucesor inorden. Recorridos recursivos reales inorden/preorden/posorden usados por SearchResult. Los nombres previos delegan y BFS inserta mediante insertar. No hay pila explícita en estos recorridos.
+
+Nueva prueba classroomTreeTraversals reproduce el árbol de Árboles p. 10: inorden `3 5 7 10 11 12 15`, preorden `10 5 3 7 12 11 15`, posorden `3 7 5 11 15 12 10`; también elimina la raíz con dos hijos. Se mantiene degenerateTree con 2000 nodos y se amplía a los tres recorridos. Pasar ese caso no garantiza profundidad arbitraria en otras JVM.
+
+Comando: `mvn -B -ntp clean verify javadoc:javadoc`. Resultado 16/11/2026 03:34: **27 pruebas, cero fallos, errores u omisiones**, Javadoc correcto, JAR ejecutable generado. Distribución: estructuras 11, BFS 4, motor 8, jugabilidad 2, controlador 2. Las victorias con enemigos mantienen 16/26/32 turnos y tres vidas.

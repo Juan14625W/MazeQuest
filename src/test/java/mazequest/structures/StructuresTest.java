@@ -249,13 +249,42 @@ class StructuresTest {
     assertTrue(t.contains(2));
   }
 
-  /** Un árbol degenerado sigue siendo válido y sus recorridos no son recursivos. */
+  /** Reproduce el árbol de la página 10 de Árboles y sus tres órdenes exactos. */
+  @Test
+  void classroomTreeTraversals() {
+    BinarySearchTree arbol = new BinarySearchTree();
+    for (int dato : new int[] {10, 5, 12, 3, 7, 11, 15}) {
+      assertTrue(arbol.insertar(dato));
+    }
+    assertFalse(arbol.insertar(10));
+    StringBuilder in = new StringBuilder(), pre = new StringBuilder(), pos = new StringBuilder();
+    arbol.inorden(dato -> in.append(dato).append(" "));
+    arbol.preorden(dato -> pre.append(dato).append(" "));
+    arbol.posorden(dato -> pos.append(dato).append(" "));
+    assertEquals("3 5 7 10 11 12 15 ", in.toString());
+    assertEquals("10 5 3 7 12 11 15 ", pre.toString());
+    assertEquals("3 7 5 11 15 12 10 ", pos.toString());
+    assertTrue(arbol.buscar(11));
+    assertTrue(arbol.eliminar(10));
+    assertFalse(arbol.buscar(10));
+    in.setLength(0);
+    arbol.inorden(dato -> in.append(dato).append(" "));
+    assertEquals("3 5 7 11 12 15 ", in.toString());
+  }
+
+  /** Conserva el caso de 2000 nodos y ejercita los tres recorridos recursivos en la JVM usada. */
   @Test
   void degenerateTree() {
     BinarySearchTree t = new BinarySearchTree();
     for (int i = 0; i < 2000; i++) t.insert(i);
     int[] count = {0};
     t.postOrder(k -> count[0]++);
+    assertEquals(2000, count[0]);
+    count[0] = 0;
+    t.inOrder(k -> count[0]++);
+    assertEquals(2000, count[0]);
+    count[0] = 0;
+    t.preOrder(k -> count[0]++);
     assertEquals(2000, count[0]);
     assertTrue(t.remove(1000));
     assertEquals(1999, t.size());

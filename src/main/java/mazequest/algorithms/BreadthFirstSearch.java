@@ -34,7 +34,7 @@ public final class BreadthFirstSearch {
     int count = 0;
     boolean found = false;
     queue.encolar(start);
-    visited.insert(key(start, maze.cols()));
+    visited.insertar(key(start, maze.cols()));
     discovered[count++] = start;
     int[] dr = {-1, 0, 1, 0}, dc = {0, 1, 0, -1};
     while (!queue.esVacia()) {
@@ -46,7 +46,7 @@ public final class BreadthFirstSearch {
       // Marcar al ENCOLAR impide que dos vecinos añadan la misma celda.
       for (int i = 0; i < 4; i++) {
         Position next = p.step(dr[i], dc[i]);
-        if (maze.walkable(next) && visited.insert(key(next, maze.cols()))) {
+        if (maze.walkable(next) && visited.insertar(key(next, maze.cols()))) {
           previous[next.row()][next.col()] = p;
           queue.encolar(next);
           discovered[count++] = next;
