@@ -113,6 +113,37 @@ class StructuresTest {
     assertNull(l.remove(0));
   }
 
+  /** Dos nodos no son singleton: retirar cabecera conserva el sobreviviente y su ciclo. */
+  @Test
+  void circularTwoNodesAndCursorInvalidation() {
+    CircularLinkedList<Integer> lista = new CircularLinkedList<>();
+    lista.addLast(11);
+    lista.addLast(8);
+    var antiguo = lista.cursor();
+    assertEquals(11, lista.remove(0));
+    assertEquals(1, lista.size());
+    var sobreviviente = lista.cursor();
+    for (int i = 0; i < 4; i++) {
+      assertEquals(8, sobreviviente.value());
+      sobreviviente.advance();
+      assertEquals(0, sobreviviente.index());
+    }
+    assertThrows(ConcurrentModificationException.class, antiguo::value);
+    assertThrows(ConcurrentModificationException.class, antiguo::advance);
+    assertThrows(ConcurrentModificationException.class, antiguo::index);
+    assertThrows(ConcurrentModificationException.class, () -> antiguo.seek(0));
+    lista.addFirst(23);
+    assertEquals(8, lista.remove(1));
+    assertEquals(0, lista.indexOf(23));
+    assertEquals(-1, lista.indexOf(8));
+    assertEquals(23, lista.remove(0));
+    StringBuilder recorrido = new StringBuilder();
+    lista.forEach(recorrido::append);
+    assertEquals("", recorrido.toString());
+    lista.addLast(17);
+    assertEquals(17, lista.get(0));
+  }
+
   /** Usa ambos recorridos para detectar enlaces prev o next rotos. */
   @Test
   void doublyLinks() {
