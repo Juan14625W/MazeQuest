@@ -20,11 +20,13 @@ Equipo confirmado: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez. Los estad
 | Manual técnico PDF: tecnologías, construcción y organización | output/pdf/manual-tecnico.pdf | Versiones concretas, paquetes y generación del JAR. |
 | Diagrama de clases | Manual técnico, secciones 1.1 y 1.2 | Diagramas vectoriales de aplicación y nodos; fuente scripts/class_diagrams.py. |
 | Ubicación, elección y tabla de complejidades de cada estructura | Manual técnico, secciones 2 y 2.1 | Operaciones, costos de peor caso y costo real del BST/BFS. |
-| Casos de prueba con resultado esperado y obtenido | Manual técnico, secciones 8 a 10 | Tabla de los 24 métodos JUnit, contrastada con sus aserciones y ejecución limpia. |
-| Presentación de ocho minutos, preguntas de doce y modificación en vivo | docs/sustentacion.md | Guion, secuencia de daño comprobada, 18 preguntas y propuesta de práctica; ensayo y defensa pendientes. |
+| Casos de prueba con resultado esperado y obtenido | Manual técnico, secciones 8 a 10 | Tabla de los 27 métodos JUnit, contrastada con sus aserciones y ejecución limpia. |
+| Presentación de ocho minutos, preguntas de doce y modificación en vivo | docs/sustentacion.md | Guion, secuencia de daño comprobada, 22 preguntas y propuesta de práctica; ensayo y defensa pendientes. |
 | Entrega el viernes 20 de noviembre de 2026 a las 18:00 | README y guion | Fecha documentada; envío y acceso docente pendientes de comprobar. |
 
 ## Compromisos internos adicionales
+
+Adaptación académica solicitada el 16/11: [matriz final y casos concretos](adaptacion-academica.md). Las cinco estructuras conservan sus operaciones y usos; el árbol usa recorridos recursivos reales. Diferencias de estilo y correcciones necesarias de los ejemplos: [matriz inicial](reviews/07-matriz-academica-inicial.md).
 
 | Compromiso | Evidencia / límite |
 |---|---|
@@ -35,4 +37,4 @@ Equipo confirmado: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez. Los estad
 | GitHub privado y revisiones reales | Repositorio privado confirmado; informes OpenCode en docs/reviews. Integración de la rama en main requiere autorización. |
 | Windows y Linux | GUI Windows parcialmente observada; CI base Ubuntu/Windows con Java 21/25 exitoso. GUI Linux pendiente. |
 
-Las 24 pruebas pasaron sin fallos, errores u omisiones en la validación limpia local. Ver [validación](validacion.md) y [auditoría original](reviews/05-auditoria-integral.md). Los informes históricos conservan los pendientes que existían entonces; esta matriz describe el estado después de las correcciones.
+Las 27 pruebas pasaron sin fallos, errores u omisiones en la validación limpia local. Ver [validación](validacion.md) y [auditoría original](reviews/05-auditoria-integral.md). Los informes históricos conservan los pendientes que existían entonces; esta matriz describe el estado después de las correcciones.

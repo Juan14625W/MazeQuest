@@ -4,7 +4,7 @@ Videojuego académico de laberintos para Estructuras de Datos, desarrollado con 
 
 ## Estado verificable
 
-Versión jugable con tres niveles, interfaz Swing/Java2D y cinco estructuras propias. Repositorio privado con primer commit remoto `896c34b` conservado. Validación limpia del 15 de noviembre de 2026: **24 pruebas, cero fallos, errores y omisiones**, con Java 21.0.13 en Windows; Javadoc correcto.
+Versión jugable con tres niveles, interfaz Swing/Java2D y cinco estructuras propias. Repositorio privado con primer commit remoto `896c34b` conservado. Validación limpia del 16 de noviembre de 2026: **27 pruebas, cero fallos, errores y omisiones**, con Java 21.0.13 en Windows; Javadoc correcto.
 
 [CI del código base 2f9d04b](https://github.com/Juan14625W/MazeQuest/actions/runs/43664777093) pasó en Ubuntu/Windows con Java 21/25. La revisión gráfica registrada se realizó en Windows. Evidencias y límites en [validación](docs/validacion.md).
 
@@ -13,6 +13,8 @@ Versión jugable con tres niveles, interfaz Swing/Java2D y cinco estructuras pro
 Tres niveles, turnos, enemigos con patrullas circulares, tres vidas, deshacer completo, pistas BFS, historial bidireccional y panel técnico con datos reales.
 
 Las cinco estructuras están implementadas con nodos propios: pila, cola, lista circular, lista doblemente enlazada y árbol binario de búsqueda. No se usan colecciones del lenguaje como sustitutos.
+
+Adaptación académica del 16 de noviembre: nodos `Nodo`, referencias y auxiliares en español, operaciones de pila/cola/BST usadas por el juego y recorridos recursivos del árbol. Se conservaron genéricos sencillos y compatibilidad de API. [Matriz final y ejemplos para sustentar](docs/adaptacion-academica.md); [comparación inicial con las diapositivas](docs/reviews/07-matriz-academica-inicial.md). Los recorridos recursivos no prometen profundidad ilimitada; se probó el caso degenerado de 2.000 nodos.
 
 ## Compilar y ejecutar
 

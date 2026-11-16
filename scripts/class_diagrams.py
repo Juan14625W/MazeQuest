@@ -74,29 +74,29 @@ def structures_diagram():
     """Relaciona cada estructura con su nodo privado y los enlaces realmente implementados."""
     d = Drawing(499, 560)
     rows = [
-        ("CustomStack<T>", ["- top: Node<T>; size: int"],
-         ["+ push, pop, peek, size, isEmpty"], ["value: T", "next: Node<T>"],
+        ("CustomStack<T>", ["- tope: Nodo<T>; cantidad: int"],
+         ["+ apilar, desapilar, verTope", "+ esVacia, tamano"], ["dato: T", "sig: Nodo<T>"],
          "GameEngine.undo guarda GameSnapshot (jugador, vidas, turno, estado y fases)."),
-        ("CustomQueue<T>", ["- first, last: Node<T>; size: int"],
-         ["+ enqueue, dequeue, peek, size, isEmpty"], ["value: T", "next: Node<T>"],
+        ("CustomQueue<T>", ["- inicio, fin: Nodo<T>; cantidad: int"],
+         ["+ encolar, desencolar, verFrente", "+ esVacia, tamano"], ["dato: T", "sig: Nodo<T>"],
          "BreadthFirstSearch usa una cola de Position para expandir por capas."),
-        ("CircularLinkedList<T>", ["- tail: Node<T>; size, version: int"],
+        ("CircularLinkedList<T>", ["- cabecera, ultimo: Nodo<T>", "- cantidad, version: int"],
          ["+ addFirst, addLast, insert, remove", "+ indexOf, forEach, cursor"],
-         ["value: T", "next: Node<T> (cierra el ciclo)"],
-         "Enemy conserva ruta y Cursor; Cursor.current apunta a un nodo de esa lista."),
-        ("DoublyLinkedList<T>", ["- first, last: Node<T>; size: int"],
+         ["dato: T", "sig: Nodo<T> (cierra el ciclo)"],
+         "Enemy conserva ruta y Cursor; Cursor.actual apunta a un nodo de esa lista."),
+        ("DoublyLinkedList<T>", ["- inicio, fin: Nodo<T>; cantidad: int"],
          ["+ addFirst, addLast, insert, remove", "+ indexOf, forEach, forEachReverse"],
-         ["value: T", "prev, next: Node<T>"],
+         ["dato: T", "ant, sig: Nodo<T>"],
          "GameEngine.history guarda MoveRecord (origen, intento, final y daño)."),
-        ("BinarySearchTree", ["- root: Node; size: int"],
-         ["+ insert, contains, remove", "+ inOrder, preOrder, postOrder"],
-         ["key: int", "left, right: Node"],
+        ("BinarySearchTree", ["- raiz: Nodo; cantidad: int"],
+         ["+ insertar, buscar, eliminar", "+ inorden, preorden, posorden"],
+         ["info: int", "izq, der: Nodo"],
          "BreadthFirstSearch usa las claves de celdas para registrar visitados."),
     ]
     for i, (title, attrs, methods, links, use) in enumerate(rows):
         y = 455 - i * 112
         box(d, 0, y, 235, 88, title, attrs, methods)
-        box(d, 299, y, 200, 88, "Node privado de " + title.split("<")[0], links, [])
+        box(d, 299, y, 200, 88, "Nodo de " + title.split("<")[0], links, [])
         arrow(d, 235, y + 44, 299, y + 44, composition=True)
         d.add(String(258, y + 53, "0..*", fontSize=8, fillColor=INK))
         d.add(String(0, y - 13, use, fontSize=8, fillColor=INK))

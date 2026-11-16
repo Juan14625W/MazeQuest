@@ -1,7 +1,7 @@
 # Manual de usuario
 MazeQuest · The Lost Labyrinth
 
-Versión 1.0.0 · 15 de noviembre de 2026
+Versión 1.0.0 · 16 de noviembre de 2026
 
 Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez.
 

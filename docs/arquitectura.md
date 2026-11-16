@@ -24,6 +24,8 @@ GameEngine usa CustomStack<GameSnapshot> y DoublyLinkedList<MoveRecord>.
 BreadthFirstSearch usa CustomQueue<Position>, BinarySearchTree y matriz de predecesores.
 SearchResult conserva ruta, orden de exploración y una instantánea real de la frontera máxima.
 
+Adaptación del 16/11: Nodo/dato/sig en pila y cola; circular con cabecera y ultimo; doble con inicio/fin y sig/ant; BST con raiz/info/izq/der y recorridos recursivos. Se preservan los tipos genéricos y los contratos externos mediante delegaciones. La recursión ocupa O(h) pila Java y puede agotarla con profundidad extrema; no altera la búsqueda BFS iterativa. Correspondencia y excepciones técnicas en adaptacion-academica.md.
+
 ## Complejidades
 Pila/cola O(1) por operación, O(n) espacio.
 Listas: insertar extremos O(1), índice/búsqueda O(n).

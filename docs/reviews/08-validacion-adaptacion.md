@@ -33,3 +33,9 @@ Nodo/info/izq/der y raiz; inserción por comparación con actual/anterior (equiv
 Nueva prueba classroomTreeTraversals reproduce el árbol de Árboles p. 10: inorden `3 5 7 10 11 12 15`, preorden `10 5 3 7 12 11 15`, posorden `3 7 5 11 15 12 10`; también elimina la raíz con dos hijos. Se mantiene degenerateTree con 2000 nodos y se amplía a los tres recorridos. Pasar ese caso no garantiza profundidad arbitraria en otras JVM.
 
 Comando: `mvn -B -ntp clean verify javadoc:javadoc`. Resultado 16/11/2026 03:34: **27 pruebas, cero fallos, errores u omisiones**, Javadoc correcto, JAR ejecutable generado. Distribución: estructuras 11, BFS 4, motor 8, jugabilidad 2, controlador 2. Las victorias con enemigos mantienen 16/26/32 turnos y tres vidas.
+
+## Documentación y comprobación gráfica
+
+Matriz final en docs/adaptacion-academica.md; manual técnico con nodos actuales, tabla de correspondencia y 27 casos; guion con 22 preguntas. PDF de usuario de cuatro páginas y técnico de doce: todas las páginas renderizadas e inspeccionadas. Corrección posterior de fechas y nueva inspección de las tres páginas afectadas, sin defectos de maquetación observados.
+
+El JAR arrancó y mostró el menú. El primer control gráfico fue detenido por Escape físico del usuario. Al reanudar, la herramienta falló con `failed to activate captured window`; el proceso Java continuaba activo y respondía. No se confunde ese arranque con una verificación completa de movimientos o del laboratorio. La evidencia y los límites se conservan en docs/validacion.md.

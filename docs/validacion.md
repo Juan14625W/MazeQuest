@@ -50,3 +50,16 @@ Este apartado actualiza los pendientes históricos anteriores. El PDF original d
 - Auditoría OpenCode de solo lectura sin hallazgos concretos en su alcance. Respuesta íntegra en [06-opencode-correcciones.md](reviews/06-opencode-correcciones.md). No se presenta como ejecución de pruebas ni inspección visual externa.
 
 Pendientes actuales: contribuciones verificables de ambos integrantes en Git; ensayo y defensa; acceso docente y envío. Integración de la rama en main sujeta a autorización. Siguen pendientes GUI de Linux, detención en breakpoint y recorrido manual exhaustivo; no son sustituidos por CI.
+
+## Adaptación a las presentaciones, 16 de noviembre de 2026
+
+- Estado inicial `5611146`: 24 pruebas y Javadoc correctos antes de modificar fuentes. Se revisaron las tres presentaciones, incluidas las imágenes de código. La [matriz inicial](reviews/07-matriz-academica-inicial.md) distingue estilo de requisitos y conserva hashes y páginas.
+- Cinco commits separados adaptan pila, cola, circular, doble y BST. Los nodos y referencias son explícitos; el árbol usa tres recorridos recursivos. Se conservan genéricos sencillos y delegaciones de compatibilidad, con su justificación en la [matriz final](adaptacion-academica.md).
+- `mvn -B -ntp clean verify javadoc:javadoc`, JDK 21.0.13 y Maven 3.9.11, a las 03:34 America/Bogota: **27 pruebas, cero fallos, errores u omisiones**, Javadoc correcto y JAR generado. Estructuras 11, BFS 4, motor 8, jugabilidad 2, controlador 2. Validación incremental en [08-validacion-adaptacion.md](reviews/08-validacion-adaptacion.md).
+- Casos nuevos: eliminar cabecera entre dos nodos circulares e invalidar cursores; limpiar enlaces de extremos dobles; reproducir los tres órdenes del árbol de la p. 10. Se conservaron 2000 nodos degenerados y se verificaron los tres recorridos recursivos. Ese resultado no garantiza una profundidad ilimitada en la pila Java.
+- El JAR de esta construcción tiene SHA-256 `cc21189f5e298af2957c5e144c2a326ee9174913d2de4a908a9ef73363e62266`. La comparación de fuentes con el estado inicial no contiene cambios en la vista, los modelos de niveles ni los assets.
+- [OpenCode](reviews/07-opencode-academica.md) auditó código y texto en modo de solo lectura. No pudo procesar imágenes; Codex hizo esa inspección. Se documenta la discrepancia sobre recursión: se atiende la solicitud explícita del estudiante con límites y pruebas.
+- Manual de usuario: cuatro páginas. Manual técnico: doce páginas, con diagramas actuales, correspondencia con clase, complejidades y los 27 casos. Se renderizaron e inspeccionaron las 16 páginas; después de corregir las fechas se regeneraron ambos PDF y se revisaron otra vez las tres páginas afectadas. No se observaron cortes ni tablas desbordadas. El guion incluye 22 preguntas para practicar.
+- El JAR abrió el menú en Windows. El primer intento de interacción se interrumpió mediante Escape físico del usuario; el segundo encontró el error de automatización `failed to activate captured window`, aunque el proceso seguía activo y respondía. Esto acredita el arranque, no una prueba gráfica completa de las funciones adaptadas. Las capturas anteriores conservan sus fechas reales.
+
+Los pendientes académicos de entrega y las verificaciones de otras plataformas indicados arriba no se consideran resueltos por esta refactorización.

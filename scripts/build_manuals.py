@@ -54,7 +54,7 @@ def footer(canvas, doc):
     canvas.drawString(48, height - 28, "MAZEQUEST  /  THE LOST LABYRINTH")
     canvas.setFillColor(INK)
     canvas.setFont("Helvetica", 8)
-    canvas.drawString(48, 27, "Versión 1.0.0  |  Documentación en español  |  15 nov 2026")
+    canvas.drawString(48, 27, "Versión 1.0.0  |  Documentación en español  |  16 nov 2026")
     canvas.drawRightString(width - 48, 27, str(doc.page))
     canvas.restoreState()
 
