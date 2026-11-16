@@ -64,7 +64,7 @@ public final class GameEngine {
       return false;
     Position target = player.step(dr, dc);
     if (!maze.walkable(target)) return false;
-    undo.push(snapshot());
+    undo.apilar(snapshot());
     Position from = player;
     boolean hit = false;
     for (Enemy e : enemies) {
@@ -90,8 +90,8 @@ public final class GameEngine {
    * @return false si no hay estados
    */
   public boolean undo() {
-    if (undo.isEmpty()) return false;
-    GameSnapshot s = undo.pop();
+    if (undo.esVacia()) return false;
+    GameSnapshot s = undo.desapilar();
     player = s.player();
     lives = s.lives();
     moves = s.moves();
@@ -153,7 +153,7 @@ public final class GameEngine {
    * @return estados disponibles
    */
   public int undoSize() {
-    return undo.size();
+    return undo.tamano();
   }
 
   /**
