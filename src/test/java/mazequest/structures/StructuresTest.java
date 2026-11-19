@@ -194,7 +194,7 @@ class StructuresTest {
     assertTrue(t.contains(2));
   }
 
-  /** Un árbol degenerado sigue siendo válido y sus recorridos no son recursivos. */
+  /** Un árbol degenerado mantiene sus datos y sus recorridos recursivos son correctos. */
   @Test
   void degenerateTree() {
     BinarySearchTree t = new BinarySearchTree();
