@@ -207,7 +207,7 @@ public final class CircularLinkedList<T> {
      *
      * @return dato actual
      */
-    public T valor() {
+    public T value() {
       check();
       return current.valor;
     }
