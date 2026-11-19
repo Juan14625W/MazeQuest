@@ -4,30 +4,30 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Historial con enlaces next/prev propios. Inserciones en extremos O(1); índice y búsqueda O(n),
+ * Historial con enlaces sig/ant propios. Inserciones en extremos O(1); índice y búsqueda O(n),
  * recorrido O(n), memoria O(n). A↔B permite mostrar A,B hacia adelante y B,A hacia atrás.
  *
  * @param <T> tipo de entrada
  */
 public final class DoublyLinkedList<T> {
   /** Nodo con dos enlaces; los extremos externos permanecen nulos. */
-  private static final class Node<T> {
-    private final T value;
-    private Node<T> next;
-    private Node<T> prev;
+  private static final class Nodo<T> {
+    private final T valor;
+    private Nodo<T> sig;
+    private Nodo<T> ant;
 
     /**
      * Almacena contenido.
      *
-     * @param value dato
+     * @param valor dato
      */
-    private Node(T value) {
-      this.value = value;
+    private Nodo(T valor) {
+      this.valor = valor;
     }
   }
 
-  private Node<T> first;
-  private Node<T> last;
+  private Nodo<T> inicio;
+  private Nodo<T> fin;
   private int size;
 
   /** Crea un historial vacío. */
@@ -36,28 +36,28 @@ public final class DoublyLinkedList<T> {
   /**
    * Inserta primero en O(1).
    *
-   * @param value dato
+   * @param valor dato
    */
-  public void addFirst(T value) {
-    Node<T> n = new Node<>(value);
-    n.next = first;
-    if (first == null) last = n;
-    else first.prev = n;
-    first = n;
+  public void addFirst(T valor) {
+    Nodo<T> n = new Nodo<>(valor);
+    n.sig = inicio;
+    if (inicio == null) fin = n;
+    else inicio.ant = n;
+    inicio = n;
     size++;
   }
 
   /**
    * Inserta último en O(1).
    *
-   * @param value dato
+   * @param valor dato
    */
-  public void addLast(T value) {
-    Node<T> n = new Node<>(value);
-    n.prev = last;
-    if (last == null) first = n;
-    else last.next = n;
-    last = n;
+  public void addLast(T valor) {
+    Nodo<T> n = new Nodo<>(valor);
+    n.ant = fin;
+    if (fin == null) inicio = n;
+    else fin.sig = n;
+    fin = n;
     size++;
   }
 
@@ -65,25 +65,25 @@ public final class DoublyLinkedList<T> {
    * Inserta por índice O(n).
    *
    * @param index posición
-   * @param value dato
+   * @param valor dato
    * @throws IndexOutOfBoundsException posición inválida
    */
-  public void insert(int index, T value) {
+  public void insert(int index, T valor) {
     if (index < 0 || index > size) throw new IndexOutOfBoundsException(index);
     if (index == 0) {
-      addFirst(value);
+      addFirst(valor);
       return;
     }
     if (index == size) {
-      addLast(value);
+      addLast(valor);
       return;
     }
-    Node<T> right = nodeAt(index), n = new Node<>(value);
+    Nodo<T> right = nodeAt(index), n = new Nodo<>(valor);
     // Se enlazan ambas direcciones antes de sustituir el enlace de right.
-    n.prev = right.prev;
-    n.next = right;
-    right.prev.next = n;
-    right.prev = n;
+    n.ant = right.ant;
+    n.sig = right;
+    right.ant.sig = n;
+    right.ant = n;
     size++;
   }
 
@@ -95,13 +95,13 @@ public final class DoublyLinkedList<T> {
    * @throws IndexOutOfBoundsException posición inválida
    */
   public T remove(int index) {
-    Node<T> n = nodeAt(index);
-    if (n.prev == null) first = n.next;
-    else n.prev.next = n.next;
-    if (n.next == null) last = n.prev;
-    else n.next.prev = n.prev;
+    Nodo<T> n = nodeAt(index);
+    if (n.ant == null) inicio = n.sig;
+    else n.ant.sig = n.sig;
+    if (n.sig == null) fin = n.ant;
+    else n.sig.ant = n.ant;
     size--;
-    return n.value;
+    return n.valor;
   }
 
   /**
@@ -112,7 +112,7 @@ public final class DoublyLinkedList<T> {
    * @throws IndexOutOfBoundsException posición inválida
    */
   public T get(int index) {
-    return nodeAt(index).value;
+    return nodeAt(index).valor;
   }
 
   /**
@@ -122,15 +122,15 @@ public final class DoublyLinkedList<T> {
    * @return nodo
    * @throws IndexOutOfBoundsException posición inválida
    */
-  private Node<T> nodeAt(int index) {
+  private Nodo<T> nodeAt(int index) {
     if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index);
-    Node<T> n;
+    Nodo<T> n;
     if (index < size / 2) {
-      n = first;
-      for (int i = 0; i < index; i++) n = n.next;
+      n = inicio;
+      for (int i = 0; i < index; i++) n = n.sig;
     } else {
-      n = last;
-      for (int i = size - 1; i > index; i--) n = n.prev;
+      n = fin;
+      for (int i = size - 1; i > index; i--) n = n.ant;
     }
     return n;
   }
@@ -138,13 +138,13 @@ public final class DoublyLinkedList<T> {
   /**
    * Busca O(n).
    *
-   * @param value dato
+   * @param valor dato
    * @return índice o -1
    */
-  public int indexOf(T value) {
+  public int indexOf(T valor) {
     int i = 0;
-    for (Node<T> n = first; n != null; n = n.next, i++)
-      if (Objects.equals(n.value, value)) return i;
+    for (Nodo<T> n = inicio; n != null; n = n.sig, i++)
+      if (Objects.equals(n.valor, valor)) return i;
     return -1;
   }
 
@@ -167,20 +167,20 @@ public final class DoublyLinkedList<T> {
   }
 
   /**
-   * Recorre next O(n).
+   * Recorre sig O(n).
    *
    * @param action visitante
    */
   public void forEach(Consumer<? super T> action) {
-    for (Node<T> n = first; n != null; n = n.next) action.accept(n.value);
+    for (Nodo<T> n = inicio; n != null; n = n.sig) action.accept(n.valor);
   }
 
   /**
-   * Recorre prev O(n).
+   * Recorre ant O(n).
    *
    * @param action visitante
    */
   public void forEachReverse(Consumer<? super T> action) {
-    for (Node<T> n = last; n != null; n = n.prev) action.accept(n.value);
+    for (Nodo<T> n = fin; n != null; n = n.ant) action.accept(n.valor);
   }
 }
