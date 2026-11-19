@@ -4,27 +4,26 @@ import java.util.function.IntConsumer;
 
 /**
  * BST de claves enteras visitadas por BFS, sin balanceo ni colecciones externas. Duplicados se
- * ignoran. Operaciones O(h), peor O(n); recorridos O(n). Espacio total O(n); recorridos usan pila
- * propia O(h), evitando desbordar la pila Java.
+ * ignoran. Operaciones O(h), peor O(n); recorridos O(n). Espacio total O(n); recorridos son recursivos O(h) de memoria auxiliar, como en la clase.
  */
 public final class BinarySearchTree {
   /** Nodo: izquierda menor, derecha mayor, sin duplicados. */
-  private static final class Node {
-    private int key;
-    private Node left;
-    private Node right;
+  private static final class Nodo {
+    private int dato;
+    private Nodo izq;
+    private Nodo der;
 
     /**
      * Guarda una clave.
      *
-     * @param key clave única
+     * @param dato clave única
      */
-    private Node(int key) {
-      this.key = key;
+    private Nodo(int dato) {
+      this.dato = dato;
     }
   }
 
-  private Node root;
+  private Nodo raiz;
   private int size;
 
   /** Crea un árbol vacío. */
@@ -33,30 +32,30 @@ public final class BinarySearchTree {
   /**
    * Inserta en O(h).
    *
-   * @param key clave
+   * @param dato clave
    * @return true si se añadió
    */
-  public boolean insert(int key) {
-    if (root == null) {
-      root = new Node(key);
+  public boolean insert(int dato) {
+    if (raiz == null) {
+      raiz = new Nodo(dato);
       size++;
       return true;
     }
-    Node n = root;
+    Nodo n = raiz;
     while (true) {
-      if (key == n.key) return false;
-      if (key < n.key) {
-        if (n.left == null) {
-          n.left = new Node(key);
+      if (dato == n.dato) return false;
+      if (dato < n.dato) {
+        if (n.izq == null) {
+          n.izq = new Nodo(dato);
           break;
         }
-        n = n.left;
+        n = n.izq;
       } else {
-        if (n.right == null) {
-          n.right = new Node(key);
+        if (n.der == null) {
+          n.der = new Nodo(dato);
           break;
         }
-        n = n.right;
+        n = n.der;
       }
     }
     size++;
@@ -66,14 +65,14 @@ public final class BinarySearchTree {
   /**
    * Busca O(h).
    *
-   * @param key clave
+   * @param dato clave
    * @return presencia
    */
-  public boolean contains(int key) {
-    Node n = root;
+  public boolean contains(int dato) {
+    Nodo n = raiz;
     while (n != null) {
-      if (key == n.key) return true;
-      n = key < n.key ? n.left : n.right;
+      if (dato == n.dato) return true;
+      n = dato < n.dato ? n.izq : n.der;
     }
     return false;
   }
@@ -81,32 +80,32 @@ public final class BinarySearchTree {
   /**
    * Elimina hoja, un hijo o dos hijos en O(h).
    *
-   * @param key clave
+   * @param dato clave
    * @return si existía
    */
-  public boolean remove(int key) {
-    Node parent = null, n = root;
-    while (n != null && n.key != key) {
+  public boolean remove(int dato) {
+    Nodo parent = null, n = raiz;
+    while (n != null && n.dato != dato) {
       parent = n;
-      n = key < n.key ? n.left : n.right;
+      n = dato < n.dato ? n.izq : n.der;
     }
     if (n == null) return false;
-    if (n.left != null && n.right != null) {
+    if (n.izq != null && n.der != null) {
       // Sustituir por el sucesor inorden conserva el orden; ese sucesor
       // tiene como máximo un hijo y se desconecta con el caso simple.
-      Node successor = n.right;
+      Nodo successor = n.der;
       parent = n;
-      while (successor.left != null) {
+      while (successor.izq != null) {
         parent = successor;
-        successor = successor.left;
+        successor = successor.izq;
       }
-      n.key = successor.key;
+      n.dato = successor.dato;
       n = successor;
     }
-    Node child = n.left != null ? n.left : n.right;
-    if (parent == null) root = child;
-    else if (parent.left == n) parent.left = child;
-    else parent.right = child;
+    Nodo child = n.izq != null ? n.izq : n.der;
+    if (parent == null) raiz = child;
+    else if (parent.izq == n) parent.izq = child;
+    else parent.der = child;
     size--;
     return true;
   }
@@ -130,61 +129,73 @@ public final class BinarySearchTree {
   }
 
   /**
-   * Inorden ascendente O(n), auxiliar O(h).
+   * Recorrido inorden: izquierda, raíz, derecha.
+   * Su estructura recursiva coincide con el ejemplo de clase.
    *
-   * @param action visitante
+   * @param action acción para mostrar cada dato
    */
   public void inOrder(IntConsumer action) {
-    CustomStack<Node> stack = new CustomStack<>();
-    Node n = root;
-    while (n != null || !stack.isEmpty()) {
-      while (n != null) {
-        stack.push(n);
-        n = n.left;
-      }
-      n = stack.pop();
-      action.accept(n.key);
-      n = n.right;
+    inorden(raiz, action);
+  }
+
+  /**
+   * Visita recursiva inorden O(n), memoria auxiliar O(h).
+   *
+   * @param aux nodo actual
+   * @param action salida de datos
+   */
+  private void inorden(Nodo aux, IntConsumer action) {
+    if (aux != null) {
+      inorden(aux.izq, action);
+      action.accept(aux.dato);
+      inorden(aux.der, action);
     }
   }
 
   /**
-   * Preorden raíz-izquierda-derecha O(n).
+   * Recorrido preorden: raíz, izquierda, derecha.
    *
-   * @param action visitante
+   * @param action acción para mostrar cada dato
    */
   public void preOrder(IntConsumer action) {
-    CustomStack<Node> stack = new CustomStack<>();
-    if (root != null) stack.push(root);
-    while (!stack.isEmpty()) {
-      Node n = stack.pop();
-      action.accept(n.key);
-      // Apilar derecha primero hace que izquierda se visite antes.
-      if (n.right != null) stack.push(n.right);
-      if (n.left != null) stack.push(n.left);
+    preorden(raiz, action);
+  }
+
+  /**
+   * Visita recursiva preorden O(n), memoria auxiliar O(h).
+   *
+   * @param aux nodo actual
+   * @param action salida de datos
+   */
+  private void preorden(Nodo aux, IntConsumer action) {
+    if (aux != null) {
+      action.accept(aux.dato);
+      preorden(aux.izq, action);
+      preorden(aux.der, action);
     }
   }
 
   /**
-   * Posorden izquierda-derecha-raíz O(n), auxiliar O(h).
+   * Recorrido posorden: izquierda, derecha, raíz.
    *
-   * @param action visitante
+   * @param action acción para mostrar cada dato
    */
   public void postOrder(IntConsumer action) {
-    CustomStack<Node> stack = new CustomStack<>();
-    Node n = root, visited = null;
-    while (n != null || !stack.isEmpty()) {
-      if (n != null) {
-        stack.push(n);
-        n = n.left;
-      } else {
-        Node top = stack.peek();
-        if (top.right != null && top.right != visited) n = top.right;
-        else {
-          action.accept(top.key);
-          visited = stack.pop();
-        }
-      }
+    posorden(raiz, action);
+  }
+
+  /**
+   * Visita recursiva posorden O(n), memoria auxiliar O(h).
+   *
+   * @param aux nodo actual
+   * @param action salida de datos
+   */
+  private void posorden(Nodo aux, IntConsumer action) {
+    if (aux != null) {
+      posorden(aux.izq, action);
+      posorden(aux.der, action);
+      action.accept(aux.dato);
     }
   }
+
 }
