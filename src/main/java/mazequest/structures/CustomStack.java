@@ -11,23 +11,23 @@ import java.util.function.Consumer;
  */
 public final class CustomStack<T> {
   /** Nodo privado: un valor y el enlace al elemento situado debajo. */
-  private static final class Node<T> {
-    private final T value;
-    private final Node<T> next;
+  private static final class Nodo<T> {
+    private final T valor;
+    private final Nodo<T> siguiente;
 
     /**
      * Conecta un nuevo tope al anterior.
      *
-     * @param value dato
-     * @param next anterior
+     * @param valor dato
+     * @param siguiente anterior
      */
-    private Node(T value, Node<T> next) {
-      this.value = value;
-      this.next = next;
+    private Nodo(T valor, Nodo<T> siguiente) {
+      this.valor = valor;
+      this.siguiente = siguiente;
     }
   }
 
-  private Node<T> top;
+  private Nodo<T> inicio;
   private int size;
 
   /** Crea una pila vacía sin nodo centinela. */
@@ -36,10 +36,10 @@ public final class CustomStack<T> {
   /**
    * Apila en O(1).
    *
-   * @param value nuevo dato
+   * @param valor nuevo dato
    */
-  public void push(T value) {
-    top = new Node<>(value, top);
+  public void push(T valor) {
+    inicio = new Nodo<>(valor, inicio);
     size++;
   }
 
@@ -50,11 +50,11 @@ public final class CustomStack<T> {
    * @throws NoSuchElementException si está vacía
    */
   public T pop() {
-    T value = peek();
+    T valor = peek();
     // El siguiente nodo pasa a ser tope; el nodo retirado queda sin referencias.
-    top = top.next;
+    inicio = inicio.siguiente;
     size--;
-    return value;
+    return valor;
   }
 
   /**
@@ -65,7 +65,7 @@ public final class CustomStack<T> {
    */
   public T peek() {
     if (isEmpty()) throw new NoSuchElementException("Pila vacía");
-    return top.value;
+    return inicio.valor;
   }
 
   /**
@@ -92,6 +92,6 @@ public final class CustomStack<T> {
    * @param action acción de consulta
    */
   public void forEach(Consumer<? super T> action) {
-    for (Node<T> n = top; n != null; n = n.next) action.accept(n.value);
+    for (Nodo<T> n = inicio; n != null; n = n.siguiente) action.accept(n.valor);
   }
 }
