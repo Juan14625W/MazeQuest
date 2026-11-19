@@ -154,6 +154,8 @@ public final class GamePanel extends JPanel {
             for (int i = 0; i < buttonCount; i++) {
               Button b = buttons[i];
               if (b.enabled && b.bounds.contains(mouseX, mouseY)) {
+                // Enter continúa desde el botón pulsado, salvo que la acción cambie de pantalla.
+                focus = i;
                 b.action.run();
                 break;
               }

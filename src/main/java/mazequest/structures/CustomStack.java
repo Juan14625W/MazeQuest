@@ -4,43 +4,52 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 /**
- * Pila LIFO enlazada para estados anteriores del motor. Push/pop/peek: O(1); recorrido: O(n);
- * espacio: O(n). Por ejemplo, push(A), push(B), pop() devuelve B.
+ * Pila LIFO de instantáneas de GameEngine para deshacer el último turno primero.
+ * Sigue Pilas y Colas, pp. 34-40: Nodo guarda información y sig; tope identifica el inicio.
+ * Invariante: tope es null exactamente cuando cantidad es cero. Apilar, desapilar, verTope,
+ * esVacia y tamano cuestan O(1); recorrer cuesta O(n); los nodos ocupan O(n).
+ * T permite guardar GameSnapshot sin convertirlo a int ni duplicar la estructura.
  *
  * @param <T> tipo de los valores, incluidos valores nulos
  */
 public final class CustomStack<T> {
-  /** Nodo privado: un valor y el enlace al elemento situado debajo. */
+  /** Nodo propio: información y referencia al elemento situado debajo del tope. */
   private static final class Nodo<T> {
-    private final T valor;
-    private final Nodo<T> siguiente;
+    private final T dato;
+    private Nodo<T> sig;
 
     /**
-     * Conecta un nuevo tope al anterior.
+     * Crea un nodo aún sin enlazar a la pila.
      *
-     * @param valor dato
-     * @param siguiente anterior
+     * @param dato información que se conservará, también puede ser null
      */
-    private Nodo(T valor, Nodo<T> siguiente) {
-      this.valor = valor;
-      this.siguiente = siguiente;
+    private Nodo(T dato) {
+      this.dato = dato;
+      this.sig = null;
     }
   }
 
-  private Nodo<T> inicio;
-  private int size;
+  private Nodo<T> tope;
+  private int cantidad;
 
   /** Crea una pila vacía sin nodo centinela. */
-  public CustomStack() {}
+  public CustomStack() {
+    tope = null;
+    cantidad = 0;
+  }
 
   /**
-   * Apila en O(1).
+   * Añade un dato al inicio en O(1), sin perder la cadena anterior.
    *
-   * @param valor nuevo dato
+   * @param dato información del nuevo tope
    */
-  public void push(T valor) {
-    inicio = new Nodo<>(valor, inicio);
-    size++;
+  public void apilar(T dato) {
+    Nodo<T> nuevo = new Nodo<>(dato);
+    // Primero conservamos el enlace al tope anterior. En vacío ese enlace es null.
+    nuevo.sig = tope;
+    // Solo después movemos el inicio: el último que entró será el primero en salir.
+    tope = nuevo;
+    cantidad++;
   }
 
   /**
@@ -49,12 +58,12 @@ public final class CustomStack<T> {
    * @return tope
    * @throws NoSuchElementException si está vacía
    */
-  public T pop() {
-    T valor = peek();
-    // El siguiente nodo pasa a ser tope; el nodo retirado queda sin referencias.
-    inicio = inicio.siguiente;
-    size--;
-    return valor;
+  public T desapilar() {
+    T dato = verTope();
+    // Al quitar el único nodo, sig es null y la pila queda vacía.
+    tope = tope.sig;
+    cantidad--;
+    return dato;
   }
 
   /**
@@ -63,9 +72,11 @@ public final class CustomStack<T> {
    * @return tope
    * @throws NoSuchElementException si está vacía
    */
-  public T peek() {
-    if (isEmpty()) throw new NoSuchElementException("Pila vacía");
-    return inicio.valor;
+  public T verTope() {
+    if (esVacia()) {
+      throw new NoSuchElementException("Pila vacía");
+    }
+    return tope.dato;
   }
 
   /**
@@ -73,8 +84,8 @@ public final class CustomStack<T> {
    *
    * @return cantidad de nodos
    */
-  public int size() {
-    return size;
+  public int tamano() {
+    return cantidad;
   }
 
   /**
@@ -82,16 +93,55 @@ public final class CustomStack<T> {
    *
    * @return true si no hay nodos
    */
-  public boolean isEmpty() {
-    return size == 0;
+  public boolean esVacia() {
+    return tope == null;
   }
 
   /**
    * Visita desde el tope sin extraer, O(n).
    *
-   * @param action acción de consulta
+   * @param action acción de consulta para cada dato; no debe modificar la pila
    */
   public void forEach(Consumer<? super T> action) {
-    for (Nodo<T> n = inicio; n != null; n = n.siguiente) action.accept(n.valor);
+    Nodo<T> actual = tope;
+    // Se mueve una referencia auxiliar; tope permanece intacto y no se desapila nada.
+    while (actual != null) {
+      action.accept(actual.dato);
+      actual = actual.sig;
+    }
+  }
+
+  /**
+   * Conserva el nombre previo de apilar, O(1), sin duplicar el algoritmo.
+   * @param dato información a apilar
+   */
+  public void push(T dato) { apilar(dato); }
+
+  /**
+   * Conserva el nombre previo de desapilar, O(1).
+   * @return dato retirado
+   * @throws NoSuchElementException si la pila está vacía
+   */
+  public T pop() { return desapilar(); }
+
+  /**
+   * Conserva el nombre previo de verTope, O(1).
+   * @return dato del tope sin retirarlo
+   * @throws NoSuchElementException si la pila está vacía
+   */
+  public T peek() { return verTope(); }
+
+  /**
+   * Conserva el nombre previo de tamano, O(1).
+   * @return número de nodos
+   */
+  public int size() { return tamano(); }
+
+  /**
+   * Conserva el nombre previo de esVacia, O(1).
+   * @return true si no hay nodos
+   */
+  public boolean isEmpty() {
+    return esVacia();
   }
 }

@@ -19,6 +19,7 @@ public final class GameEngine {
    * Construye la partida y copia patrullas a listas circulares.
    *
    * @param maze mapa validado
+   * @throws NullPointerException si maze es nulo
    */
   public GameEngine(Maze maze) {
     this.maze = Objects.requireNonNull(maze);
@@ -63,7 +64,7 @@ public final class GameEngine {
       return false;
     Position target = player.step(dr, dc);
     if (!maze.walkable(target)) return false;
-    undo.push(snapshot());
+    undo.apilar(snapshot());
     Position from = player;
     boolean hit = false;
     for (Enemy e : enemies) {
@@ -89,8 +90,8 @@ public final class GameEngine {
    * @return false si no hay estados
    */
   public boolean undo() {
-    if (undo.isEmpty()) return false;
-    GameSnapshot s = undo.pop();
+    if (undo.esVacia()) return false;
+    GameSnapshot s = undo.desapilar();
     player = s.player();
     lives = s.lives();
     moves = s.moves();
@@ -152,7 +153,7 @@ public final class GameEngine {
    * @return estados disponibles
    */
   public int undoSize() {
-    return undo.size();
+    return undo.tamano();
   }
 
   /**
@@ -167,8 +168,9 @@ public final class GameEngine {
   /**
    * Consulta bidireccional por índice.
    *
-   * @param index entrada
+   * @param index entrada entre 0 (incluido) y historySize() (excluido)
    * @return registro
+   * @throws IndexOutOfBoundsException si index no identifica una entrada existente
    */
   public MoveRecord historyAt(int index) {
     return history.get(index);
@@ -218,8 +220,9 @@ public final class GameEngine {
   /**
    * Consulta posición sin exponer enemigo mutable.
    *
-   * @param index enemigo
+   * @param index enemigo entre 0 (incluido) y enemyCount() (excluido)
    * @return posición
+   * @throws IndexOutOfBoundsException si index no identifica un enemigo existente
    */
   public Position enemyPosition(int index) {
     return enemies[index].position();
@@ -228,8 +231,9 @@ public final class GameEngine {
   /**
    * Consulta cursor.
    *
-   * @param index enemigo
+   * @param index enemigo entre 0 (incluido) y enemyCount() (excluido)
    * @return índice
+   * @throws IndexOutOfBoundsException si index no identifica un enemigo existente
    */
   public int enemyIndex(int index) {
     return enemies[index].index();
@@ -238,8 +242,9 @@ public final class GameEngine {
   /**
    * Inspección de lista circular real.
    *
-   * @param index enemigo
+   * @param index enemigo entre 0 (incluido) y enemyCount() (excluido)
    * @return ruta
+   * @throws IndexOutOfBoundsException si index no identifica un enemigo existente
    */
   public String patrolText(int index) {
     return enemies[index].routeText();

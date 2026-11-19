@@ -33,12 +33,12 @@ public final class BreadthFirstSearch {
     Position[] peak = {start};
     int count = 0;
     boolean found = false;
-    queue.enqueue(start);
-    visited.insert(key(start, maze.cols()));
+    queue.encolar(start);
+    visited.insertar(key(start, maze.cols()));
     discovered[count++] = start;
     int[] dr = {-1, 0, 1, 0}, dc = {0, 1, 0, -1};
-    while (!queue.isEmpty()) {
-      Position p = queue.dequeue();
+    while (!queue.esVacia()) {
+      Position p = queue.desencolar();
       if (p.equals(goal)) {
         found = true;
         break;
@@ -46,15 +46,15 @@ public final class BreadthFirstSearch {
       // Marcar al ENCOLAR impide que dos vecinos añadan la misma celda.
       for (int i = 0; i < 4; i++) {
         Position next = p.step(dr[i], dc[i]);
-        if (maze.walkable(next) && visited.insert(key(next, maze.cols()))) {
+        if (maze.walkable(next) && visited.insertar(key(next, maze.cols()))) {
           previous[next.row()][next.col()] = p;
-          queue.enqueue(next);
+          queue.encolar(next);
           discovered[count++] = next;
         }
       }
-      if (queue.size() > peak.length) {
+      if (queue.tamano() > peak.length) {
         // Captura FIFO genuina; la vista la etiqueta como instantánea histórica.
-        Position[] snapshot = new Position[queue.size()];
+        Position[] snapshot = new Position[queue.tamano()];
         int[] index = {0};
         queue.forEach(pending -> snapshot[index[0]++] = pending);
         peak = snapshot;

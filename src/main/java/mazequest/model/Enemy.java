@@ -11,6 +11,8 @@ public final class Enemy {
    * Copia posiciones a nodos y crea cursor.
    *
    * @param positions patrulla validada por Maze
+   * @throws NullPointerException si positions es nulo
+   * @throws java.util.NoSuchElementException si positions está vacío
    */
   public Enemy(Position[] positions) {
     for (Position p : positions) route.addLast(p);
@@ -43,7 +45,8 @@ public final class Enemy {
   /**
    * Restaura una instantánea O(n).
    *
-   * @param index índice guardado
+   * @param index índice guardado, entre 0 (incluido) y longitud de patrulla (excluida)
+   * @throws IndexOutOfBoundsException si el índice no pertenece a la patrulla
    */
   public void restore(int index) {
     cursor.seek(index);

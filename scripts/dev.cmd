@@ -1,8 +1,8 @@
 @echo off
-rem Abre VS Code con Java 21 y Maven locales disponibles para sus extensiones.
+rem Abre VS Code respetando el JDK configurado y priorizando JDK 21 local si falta.
 setlocal
 cd /d "%~dp0.."
-if exist ".tools\jdk" for /d %%J in (".tools\jdk\*") do set "JAVA_HOME=%%~fJ"
-if defined JAVA_HOME set "PATH=%JAVA_HOME%\bin;%PATH%"
+call "%~dp0java-env.cmd"
+if errorlevel 1 exit /b 1
 set "PATH=%CD%\.tools\apache-maven-3.9.11\bin;%PATH%"
 call code .

@@ -140,8 +140,9 @@ public final class Maze {
   /**
    * Copia defensiva de una ruta.
    *
-   * @param index enemigo
+   * @param index enemigo entre 0 (incluido) y enemyCount() (excluido)
    * @return ruta independiente
+   * @throws IndexOutOfBoundsException si index no identifica una ruta existente
    */
   public Position[] route(int index) {
     return routes[index].clone();

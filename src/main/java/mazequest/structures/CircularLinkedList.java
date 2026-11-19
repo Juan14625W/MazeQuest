@@ -6,239 +6,299 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Lista circular simple para patrullas. El último enlaza siempre al primero. Extremos O(1) al
- * insertar; operaciones por índice y búsqueda O(n); espacio O(n). Una patrulla A,B,C vuelve a A
- * siguiendo sig desde C.
+ * Lista circular propia que guarda las posiciones de patrulla de Enemy.
+ * Sigue Listas, pp. 9-18: Nodo contiene dato/sig y un recorrido termina al volver a cabecera.
+ * Invariantes: en vacío cabecera y ultimo son null; en otro caso ultimo.sig == cabecera.
+ * El único nodo se enlaza a sí mismo. Se conserva ultimo para insertar en extremos en O(1),
+ * sin buscarlo en cada inserción como en las diapositivas. Índices, búsqueda y recorrido O(n);
+ * memoria O(n). El cursor añade avance O(1) y restauración O(n) para deshacer turnos.
  *
- * @param <T> dato almacenado
+ * @param <T> tipo de dato; Enemy usa Position y se admiten datos null
  */
 public final class CircularLinkedList<T> {
-  /** Nodo propio cuyo sucesor nunca es null mientras pertenece a la lista. */
+  /**
+   * Nodo privado con información y referencia al siguiente elemento del ciclo.
+   * @param <T> tipo de información
+   */
   private static final class Nodo<T> {
-    private final T valor;
+    private final T dato;
     private Nodo<T> sig;
 
     /**
-     * Guarda el dato.
-     *
-     * @param valor contenido
+     * Crea un nodo todavía sin incorporar al ciclo.
+     * @param dato información a conservar
      */
-    private Nodo(T valor) {
-      this.valor = valor;
+    private Nodo(T dato) {
+      this.dato = dato;
+      this.sig = null;
     }
   }
 
+  private Nodo<T> cabecera;
   private Nodo<T> ultimo;
-  private int size;
+  private int cantidad;
   private int version;
 
-  /** Crea el ciclo vacío. */
-  public CircularLinkedList() {}
+  /** Crea una lista vacía sin centinelas ni nodos artificiales. */
+  public CircularLinkedList() {
+    cabecera = null;
+    ultimo = null;
+    cantidad = 0;
+    version = 0;
+  }
 
   /**
-   * Inserta primero en O(1).
-   *
-   * @param valor dato
+   * Inserta al inicio en O(1); equivale a InsertarInicio de clase.
+   * @param dato información del nuevo primer nodo
    */
-  public void addFirst(T valor) {
-    Nodo<T> n = new Nodo<>(valor);
-    if (ultimo == null) {
-      n.sig = n;
-      ultimo = n;
+  public void addFirst(T dato) {
+    Nodo<T> nuevo = new Nodo<>(dato);
+    if (isEmpty()) {
+      // Un solo nodo es a la vez principio y final: debe volver a sí mismo.
+      cabecera = nuevo;
+      ultimo = nuevo;
+      nuevo.sig = nuevo;
     } else {
-      n.sig = ultimo.sig;
-      ultimo.sig = n;
+      // Conservamos el inicio antiguo antes de cambiar cabecera.
+      nuevo.sig = cabecera;
+      cabecera = nuevo;
+      ultimo.sig = cabecera;
     }
-    size++;
+    cantidad++;
     version++;
   }
 
   /**
-   * Inserta último en O(1).
-   *
-   * @param valor dato
+   * Inserta al final en O(1); equivale a InsertarFinal de clase.
+   * @param dato información del nuevo último nodo
    */
-  public void addLast(T valor) {
-    addFirst(valor);
-    ultimo = ultimo.sig;
+  public void addLast(T dato) {
+    Nodo<T> nuevo = new Nodo<>(dato);
+    if (isEmpty()) {
+      cabecera = nuevo;
+      ultimo = nuevo;
+      nuevo.sig = nuevo;
+    } else {
+      // El nuevo enlaza a la cabecera y el último antiguo enlaza al nuevo.
+      nuevo.sig = cabecera;
+      ultimo.sig = nuevo;
+      ultimo = nuevo;
+    }
+    cantidad++;
+    version++;
   }
 
   /**
-   * Inserta en O(n).
-   *
-   * @param index entre 0 y size
-   * @param valor dato
-   * @throws IndexOutOfBoundsException índice inválido
+   * Inserta por posición en O(n), o en O(1) si es un extremo.
+   * @param index posición entre cero y size(), ambos incluidos
+   * @param dato información del nuevo nodo
+   * @throws IndexOutOfBoundsException si index no es una posición de inserción
    */
-  public void insert(int index, T valor) {
-    if (index < 0 || index > size) throw new IndexOutOfBoundsException(index);
+  public void insert(int index, T dato) {
+    if (index < 0 || index > cantidad) {
+      throw new IndexOutOfBoundsException(index);
+    }
     if (index == 0) {
-      addFirst(valor);
-      return;
+      addFirst(dato);
+    } else if (index == cantidad) {
+      addLast(dato);
+    } else {
+      Nodo<T> anterior = nodoEn(index - 1);
+      Nodo<T> nuevo = new Nodo<>(dato);
+      // Primero retenemos el resto del ciclo; después sustituimos el enlace anterior.
+      nuevo.sig = anterior.sig;
+      anterior.sig = nuevo;
+      cantidad++;
+      version++;
     }
-    if (index == size) {
-      addLast(valor);
-      return;
-    }
-    Nodo<T> prev = nodeAt(index - 1), n = new Nodo<>(valor);
-    // Se conserva el resto del ciclo antes de sustituir el enlace anterior.
-    n.sig = prev.sig;
-    prev.sig = n;
-    size++;
-    version++;
   }
 
   /**
-   * Elimina en O(n).
-   *
-   * @param index posición
-   * @return dato retirado
-   * @throws IndexOutOfBoundsException índice inválido
+   * Elimina por posición en O(n); quitar la cabecera cuesta O(1).
+   * @param index posición existente, desde cero
+   * @return dato del nodo retirado
+   * @throws IndexOutOfBoundsException si index no identifica un nodo
    */
   public T remove(int index) {
-    Nodo<T> victim = nodeAt(index);
-    if (size == 1) ultimo = null;
-    else {
-      Nodo<T> prev = index == 0 ? ultimo : nodeAt(index - 1);
-      prev.sig = victim.sig;
-      if (victim == ultimo) ultimo = prev;
+    Nodo<T> actual = nodoEn(index);
+    if (cantidad == 1) {
+      // Comprobar singleton antes de mover cabecera evita confundirlo con dos nodos.
+      cabecera = null;
+      ultimo = null;
+    } else if (index == 0) {
+      cabecera = actual.sig;
+      ultimo.sig = cabecera;
+    } else {
+      Nodo<T> anterior = nodoEn(index - 1);
+      anterior.sig = actual.sig;
+      if (actual == ultimo) {
+        // El penúltimo pasa a ser último; su sig ya apunta a cabecera.
+        ultimo = anterior;
+      }
     }
-    size--;
+    cantidad--;
     version++;
-    return victim.valor;
+    return actual.dato;
   }
 
   /**
-   * Busca por igualdad en O(n).
-   *
-   * @param valor objetivo
-   * @return índice o -1
+   * Busca el primer dato igual en una vuelta O(n), sin alterar cabecera.
+   * @param dato información buscada; Objects.equals permite comparar también null
+   * @return índice desde cero, o -1 cuando no aparece
    */
-  public int indexOf(T valor) {
-    Nodo<T> n = ultimo == null ? null : ultimo.sig;
-    for (int i = 0; i < size; i++, n = n.sig) if (Objects.equals(n.valor, valor)) return i;
+  public int indexOf(T dato) {
+    if (isEmpty()) {
+      return -1;
+    }
+    Nodo<T> actual = cabecera;
+    int indice = 0;
+    do {
+      if (Objects.equals(actual.dato, dato)) {
+        return indice;
+      }
+      actual = actual.sig;
+      indice++;
+    } while (actual != cabecera);
     return -1;
   }
 
   /**
-   * Consulta O(n).
-   *
-   * @param index índice
-   * @return dato
-   * @throws IndexOutOfBoundsException índice inválido
+   * Consulta un dato por posición en O(n).
+   * @param index posición existente, desde cero
+   * @return información del nodo
+   * @throws IndexOutOfBoundsException si index no identifica un nodo
    */
   public T get(int index) {
-    return nodeAt(index).valor;
+    return nodoEn(index).dato;
   }
 
   /**
-   * Localiza un nodo en O(n).
-   *
-   * @param index índice
-   * @return nodo
-   * @throws IndexOutOfBoundsException índice inválido
+   * Localiza un nodo avanzando desde cabecera, O(n).
+   * @param index posición existente, desde cero
+   * @return referencia interna al nodo
+   * @throws IndexOutOfBoundsException si index no identifica un nodo
    */
-  private Nodo<T> nodeAt(int index) {
-    if (index < 0 || index >= size) throw new IndexOutOfBoundsException(index);
-    Nodo<T> n = ultimo.sig;
-    for (int i = 0; i < index; i++) n = n.sig;
-    return n;
+  private Nodo<T> nodoEn(int index) {
+    if (index < 0 || index >= cantidad) {
+      throw new IndexOutOfBoundsException(index);
+    }
+    Nodo<T> actual = cabecera;
+    for (int i = 0; i < index; i++) {
+      actual = actual.sig;
+    }
+    return actual;
   }
 
   /**
-   * Cantidad O(1).
-   *
-   * @return nodos
+   * Consulta el contador de nodos en O(1).
+   * @return cantidad de nodos de la lista
    */
-  public int size() {
-    return size;
-  }
+  public int size() { return cantidad; }
 
   /**
-   * Vacío O(1).
-   *
-   * @return ausencia de nodos
+   * Comprueba ausencia de cabecera en O(1).
+   * @return true cuando la lista está vacía
    */
-  public boolean isEmpty() {
-    return size == 0;
-  }
+  public boolean isEmpty() { return cabecera == null; }
 
   /**
-   * Visita exactamente una vuelta, O(n).
-   *
-   * @param action visitante
+   * Recorre exactamente una vuelta desde cabecera, O(n), como MostrarCompleta de clase.
+   * @param action acción de consulta para cada dato; no debe modificar la lista
    */
   public void forEach(Consumer<? super T> action) {
-    Nodo<T> n = ultimo == null ? null : ultimo.sig;
-    for (int i = 0; i < size; i++, n = n.sig) action.accept(n.valor);
+    if (isEmpty()) {
+      return;
+    }
+    Nodo<T> actual = cabecera;
+    // No se busca null: todos los nodos del ciclo tienen sucesor.
+    do {
+      action.accept(actual.dato);
+      actual = actual.sig;
+    } while (actual != cabecera);
   }
 
   /**
-   * Crea un cursor circular.
-   *
-   * @return cursor al inicio
-   * @throws NoSuchElementException si no hay nodos
+   * Crea un cursor en cabecera en O(1), sin exponer enlaces al motor.
+   * @return cursor de patrulla independiente de otros cursores
+   * @throws NoSuchElementException si la lista está vacía
    */
   public Cursor cursor() {
-    if (isEmpty()) throw new NoSuchElementException("Patrulla vacía");
+    if (isEmpty()) {
+      throw new NoSuchElementException("Patrulla vacía");
+    }
     return new Cursor();
   }
 
-  /** Cursor de patrulla O(1) por avance; se invalida si se edita la lista. */
+  /**
+   * Referencia auxiliar persistente de Enemy: avanzar sigue sig; restaurar busca un índice.
+   * La versión detecta ediciones de la ruta que invalidarían una fase guardada para deshacer.
+   * No copia la lista ni cambia cabecera. Cada cursor ocupa O(1).
+   */
   public final class Cursor {
-    private Nodo<T> current = ultimo.sig;
-    private final int expectedVersion = version;
-    private int index;
+    private Nodo<T> actual;
+    private final int versionEsperada;
+    private int indice;
 
-    /** Captura el nodo inicial y la versión actual. */
-    private Cursor() {}
+    /** Captura la cabecera y la versión actual de los enlaces. */
+    private Cursor() {
+      actual = cabecera;
+      versionEsperada = version;
+      indice = 0;
+    }
 
     /**
-     * Comprueba que los enlaces no cambiaron.
-     *
+     * Comprueba que la ruta no fue editada desde la creación del cursor, O(1).
+     * @throws ConcurrentModificationException si cambiaron sus nodos
+     */
+    private void comprobarVersion() {
+      if (version != versionEsperada) {
+        throw new ConcurrentModificationException();
+      }
+    }
+
+    /**
+     * Consulta la posición de patrulla en O(1).
+     * @return dato del nodo actual
      * @throws ConcurrentModificationException si se modificó la lista
      */
-    private void check() {
-      if (version != expectedVersion) throw new ConcurrentModificationException();
-    }
-
-    /**
-     * Consulta O(1).
-     *
-     * @return dato actual
-     */
     public T value() {
-      check();
-      return current.valor;
-    }
-
-    /** Avanza por sig, incluso último→primero, O(1). */
-    public void advance() {
-      check();
-      current = current.sig;
-      index = (index + 1) % size;
+      comprobarVersion();
+      return actual.dato;
     }
 
     /**
-     * Índice para instantáneas.
-     *
-     * @return posición actual
+     * Avanza un enlace en O(1); ultimo.sig devuelve a cabecera sin reconstruir la ruta.
+     * @throws ConcurrentModificationException si se modificó la lista
+     */
+    public void advance() {
+      comprobarVersion();
+      actual = actual.sig;
+      indice++;
+      if (indice == cantidad) {
+        indice = 0;
+      }
+    }
+
+    /**
+     * Consulta la fase que se guarda en GameSnapshot, O(1).
+     * @return índice actual entre cero y size()-1
+     * @throws ConcurrentModificationException si se modificó la lista
      */
     public int index() {
-      check();
-      return index;
+      comprobarVersion();
+      return indice;
     }
 
     /**
-     * Restaura posición en O(n).
-     *
-     * @param index posición
-     * @throws IndexOutOfBoundsException posición inválida
+     * Restaura la fase anterior al deshacer un turno, O(n).
+     * @param index índice de fase que se desea restaurar
+     * @throws IndexOutOfBoundsException si el índice no existe
+     * @throws ConcurrentModificationException si se modificó la lista
      */
     public void seek(int index) {
-      check();
-      current = nodeAt(index);
-      this.index = index;
+      comprobarVersion();
+      actual = nodoEn(index);
+      indice = index;
     }
   }
 }

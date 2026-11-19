@@ -1,0 +1,4 @@
+# Conservar los bytes y offsets internos de documentos e imágenes.
+*.pdf binary
+*.jpg binary
+*.png binary

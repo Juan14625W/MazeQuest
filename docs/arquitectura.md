@@ -1,5 +1,5 @@
 # Arquitectura y reglas
-Diseño inicial y posterior adaptación a los cuatro PDF académicos compartidos el 19 de noviembre de 2026; ver docs/adaptacion-clase.md.
+Diseño contrastado con el PDF original de la profesora el 15 de noviembre de 2026. Diagramas de clases y nodos en el manual técnico; requisitos y evidencia en trazabilidad.md.
 
 ## Dependencias
 view → controller → engine → model y structures. algorithms → model y structures.
@@ -24,11 +24,13 @@ GameEngine usa CustomStack<GameSnapshot> y DoublyLinkedList<MoveRecord>.
 BreadthFirstSearch usa CustomQueue<Position>, BinarySearchTree y matriz de predecesores.
 SearchResult conserva ruta, orden de exploración y una instantánea real de la frontera máxima.
 
+Adaptación del 16/11: Nodo/dato/sig en pila y cola; circular con cabecera y ultimo; doble con inicio/fin y sig/ant; BST con raiz/info/izq/der y recorridos recursivos. Se preservan los tipos genéricos y los contratos externos mediante delegaciones. La recursión ocupa O(h) pila Java y puede agotarla con profundidad extrema; no altera la búsqueda BFS iterativa. Correspondencia y excepciones técnicas en adaptacion-academica.md.
+
 ## Complejidades
 Pila/cola O(1) por operación, O(n) espacio.
 Listas: insertar extremos O(1), índice/búsqueda O(n).
-BST no balanceado O(h), peor O(n) para buscar/insertar/eliminar; recorridos recursivos O(n), memoria auxiliar O(h).
-BFS O((V+E)h), peor O(V²) en cuadrícula; espacio O(V). No se promete O(V+E).
+BST no balanceado O(h), peor O(n) para buscar/insertar/eliminar; recorridos O(n).
+BFS O(A+(V+E)h+F²), peor O(A²) en cuadrícula; espacio O(A). A es el área del tablero, V las celdas descubiertas, h la altura del BST y F la máxima frontera. F² contempla copias diagnósticas al crecer el máximo de cola. No se promete O(V+E).
 
 ## Verificación
 Cada fase necesita compilación y pruebas ejecutadas. La entrega requiere JAR real, GUI revisada, manuales PDF con capturas reales y guion. Registrar explícitamente plataformas y requisitos no verificados.

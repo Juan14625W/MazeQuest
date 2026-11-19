@@ -169,4 +169,24 @@ class GameEngineTest {
     s.enemies()[0] = 88;
     assertEquals(1, s.enemies()[0]);
   }
+
+  /** Reproduce el ensayo: el quinto paso causa daño y un undo recupera el turno cuatro. */
+  @Test
+  void presentationCollisionOccursOnFifthStep() {
+    GameEngine e = new GameEngine(Levels.get(0));
+    for (int i = 0; i < 4; i++) {
+      assertTrue(e.move(0, 1));
+      assertEquals(3, e.lives());
+    }
+    Position playerBefore = e.player(), enemyBefore = e.enemyPosition(0);
+    assertTrue(e.move(0, 1));
+    assertEquals(2, e.lives());
+    assertEquals(e.maze().start(), e.player());
+    assertEquals(5, e.moves());
+    assertTrue(e.undo());
+    assertEquals(3, e.lives());
+    assertEquals(4, e.moves());
+    assertEquals(playerBefore, e.player());
+    assertEquals(enemyBefore, e.enemyPosition(0));
+  }
 }
