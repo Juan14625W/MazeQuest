@@ -11,22 +11,22 @@ import java.util.function.Consumer;
  */
 public final class CustomQueue<T> {
   /** Nodo con sucesor mutable para enlazar al final. */
-  private static final class Node<T> {
-    private final T value;
-    private Node<T> next;
+  private static final class Nodo<T> {
+    private final T valor;
+    private Nodo<T> siguiente;
 
     /**
      * Almacena el dato.
      *
-     * @param value valor
+     * @param valor valor
      */
-    private Node(T value) {
-      this.value = value;
+    private Nodo(T valor) {
+      this.valor = valor;
     }
   }
 
-  private Node<T> first;
-  private Node<T> last;
+  private Nodo<T> inicio;
+  private Nodo<T> fin;
   private int size;
 
   /** Construye una cola vacía con ambos extremos nulos. */
@@ -35,14 +35,14 @@ public final class CustomQueue<T> {
   /**
    * Encola en O(1).
    *
-   * @param value valor
+   * @param valor valor
    */
-  public void enqueue(T value) {
-    Node<T> node = new Node<>(value);
+  public void enqueue(T valor) {
+    Nodo<T> node = new Nodo<>(valor);
     // En vacío ambos extremos apuntan al único nodo.
-    if (last == null) first = node;
-    else last.next = node;
-    last = node;
+    if (fin == null) inicio = node;
+    else fin.siguiente = node;
+    fin = node;
     size++;
   }
 
@@ -53,12 +53,12 @@ public final class CustomQueue<T> {
    * @throws NoSuchElementException si vacía
    */
   public T dequeue() {
-    T value = peek();
-    first = first.next;
+    T valor = peek();
+    inicio = inicio.siguiente;
     size--;
     // No conservar un final huérfano al retirar el último elemento.
-    if (first == null) last = null;
-    return value;
+    if (inicio == null) fin = null;
+    return valor;
   }
 
   /**
@@ -69,7 +69,7 @@ public final class CustomQueue<T> {
    */
   public T peek() {
     if (isEmpty()) throw new NoSuchElementException("Cola vacía");
-    return first.value;
+    return inicio.valor;
   }
 
   /**
@@ -96,6 +96,6 @@ public final class CustomQueue<T> {
    * @param action visitante
    */
   public void forEach(Consumer<? super T> action) {
-    for (Node<T> n = first; n != null; n = n.next) action.accept(n.value);
+    for (Nodo<T> n = inicio; n != null; n = n.siguiente) action.accept(n.valor);
   }
 }
