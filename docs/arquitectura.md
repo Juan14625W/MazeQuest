@@ -1,5 +1,5 @@
 # Arquitectura y reglas
-Diseño inicial basado en el prompt; PDF original no disponible.
+Diseño inicial y posterior adaptación a los cuatro PDF académicos compartidos el 19 de noviembre de 2026; ver docs/adaptacion-clase.md.
 
 ## Dependencias
 view → controller → engine → model y structures. algorithms → model y structures.
@@ -27,7 +27,7 @@ SearchResult conserva ruta, orden de exploración y una instantánea real de la 
 ## Complejidades
 Pila/cola O(1) por operación, O(n) espacio.
 Listas: insertar extremos O(1), índice/búsqueda O(n).
-BST no balanceado O(h), peor O(n) para buscar/insertar/eliminar; recorridos O(n).
+BST no balanceado O(h), peor O(n) para buscar/insertar/eliminar; recorridos recursivos O(n), memoria auxiliar O(h).
 BFS O((V+E)h), peor O(V²) en cuadrícula; espacio O(V). No se promete O(V+E).
 
 ## Verificación
