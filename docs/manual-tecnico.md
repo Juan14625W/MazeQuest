@@ -3,7 +3,7 @@ MazeQuest · Estructuras de Datos
 
 Versión 1.0.0 · 16 de noviembre de 2026
 
-Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez.
+Equipo: Juan David Paz Rodriguez, José Ángel Lopez Paz y Carolina Diago Fernandez.
 
 ## 1. Construcción y arquitectura
 Java 21 (validado con 21.0.13), Maven 3.9.11, JUnit Jupiter 5.11.4, Swing y Java2D del JDK. Entrada: mazequest.Main. Motor, modelos, estructuras y BFS funcionan sin ventanas. Swing queda en la entrada, el controlador y la vista.
@@ -161,7 +161,7 @@ Para agregar mapas, respetar rectangularidad, símbolos, entrada/salida únicas 
 
 Los informes reales de OpenCode se conservan en docs/reviews. Los manuales se generan desde Markdown mediante scripts/build_manuals.py y usan capturas de docs/screenshots.
 
-El PDF original de la profesora (cuatro páginas) se contrastó el 15 de noviembre. El equipo está confirmado. Pendientes: contribuciones reales identificables de ambos en Git y ensayo de defensa; integración a main sujeta a autorización. GUI en Linux y detención efectiva en breakpoint siguen sin verificarse. No se afirma cobertura porcentual ni revisión manual completa de todas las pantallas.
+El PDF original de la profesora (cuatro páginas) se contrastó el 15 de noviembre. El equipo está confirmado. Pendientes: contribuciones reales identificables de los tres integrantes en Git y ensayo de defensa; integración a main sujeta a autorización. GUI en Linux y detención efectiva en breakpoint siguen sin verificarse. No se afirma cobertura porcentual ni revisión manual completa de todas las pantallas.
 
 <!-- pagebreak -->
 ## 8. Casos: estructuras
