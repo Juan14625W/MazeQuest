@@ -3,7 +3,7 @@ MazeQuest · The Lost Labyrinth
 
 Versión 1.0.0 · 16 de noviembre de 2026
 
-Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez.
+Equipo: Juan David Paz Rodriguez, José Ángel Lopez Paz y Carolina Diago Fernandez.
 
 ## 1. Preparar y abrir el juego
 Alcanza la salida dorada evitando guardianes. Cada nivel empieza con tres vidas. Puedes consultar pistas, revisar estructuras internas y deshacer decisiones.

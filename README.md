@@ -75,17 +75,17 @@ Para regenerar los manuales, instalar `scripts/requirements-docs.txt` en un ento
 
 Contrastado el 15 de noviembre con las cuatro páginas de «Proyecto final – Estructuras de Datos.pdf», suministrado por el solicitante. La [trazabilidad](docs/trazabilidad.md) distingue requisitos de la profesora y compromisos internos. El manual técnico incorpora diagramas de clases, justificación de estructuras, complejidades y casos con resultado esperado y obtenido.
 
-Pendientes de entrega: contribuciones reales identificables de ambos integrantes en Git, ensayo de ocho minutos y defensa individual de doce minutos. La integración de esta rama en `main` requiere autorización. La GUI de Linux y la detención en un breakpoint de VS Code siguen sin verificarse.
+Pendientes de entrega: contribuciones reales identificables de los tres integrantes en Git, ensayo de ocho minutos y defensa individual de doce minutos. La integración de esta rama en `main` requiere autorización. La GUI de Linux y la detención en un breakpoint de VS Code siguen sin verificarse.
 
 Entrega indicada: 20 de noviembre de 2026, 18:00, America/Bogota.
 
 ## Autoría
 
-- Juan David Paz Rodriguez.
+- Juan David Paz Rodriguez
 - José Ángel Lopez Paz
-- Carolina Diago Fernandez 
+- Carolina Diago Fernandez
 
-Equipo académico confirmado por el solicitante. La identidad de Git se conserva: indicar el equipo no demuestra contribuciones de ambos en el historial. Desarrollo asistido por Codex; las revisiones reales de OpenCode están identificadas en `docs/reviews/`.
+Equipo académico confirmado por el solicitante. La identidad de Git se conserva: indicar el equipo no demuestra contribuciones individuales de los tres en el historial. Las auditorías históricas conservan los datos registrados en su momento. Desarrollo asistido por Codex; las revisiones reales de OpenCode están identificadas en `docs/reviews/`.
 
 ## Acceso docente
 

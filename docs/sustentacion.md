@@ -2,7 +2,7 @@
 
 Guion para ensayar; no es una exposición ya realizada. Preparar JAR, proyecto en VS Code e informes de prueba. Evitar descargas durante la presentación.
 
-Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez. Distribuir la demostración entre ambos, pero ensayar también intercambiando papeles: cada integrante debe poder explicar cualquier parte del código.
+Equipo: Juan David Paz Rodriguez, José Ángel Lopez Paz y Carolina Diago Fernandez. Distribuir la demostración entre los tres, pero ensayar también intercambiando papeles: cada integrante debe poder explicar cualquier parte del código.
 
 | Tiempo | Demostración y explicación |
 |---|---|
@@ -39,7 +39,7 @@ Desde El umbral recién iniciado, avanzar **cinco veces a la derecha**, dejando 
 15. **¿Por qué SwingWorker y Timer?** Cálculo fuera del EDT, publicación en él y repintados sin bloquear. El reloj no mueve enemigos.
 16. **¿Qué demuestra jugabilidad?** Secuencias con fase reproducidas contra GameEngine ganan los tres niveles sin perder vidas.
 17. **¿Colecciones estándar?** No sustituyen las estructuras. Los arreglos son auxiliares para mapas, predecesores e instantáneas.
-18. **¿Qué falta verificar?** Contribuciones reales de ambos en Git, ensayo de la defensa, GUI de Linux y breakpoint. El PDF académico ya se contrastó y el equipo está confirmado. CI sin ventanas no reemplaza revisión gráfica.
+18. **¿Qué falta verificar?** Contribuciones reales de los tres integrantes en Git, ensayo de la defensa, GUI de Linux y breakpoint. El PDF académico ya se contrastó y el equipo está confirmado. CI sin ventanas no reemplaza revisión gráfica.
 19. **¿Por qué conservar T?** La pila guarda GameSnapshot, la cola Position y la doble MoveRecord. T conserva el tipo sin duplicar algoritmos ni convertir todo a Object; los enlaces siguen siendo Nodo y sig/ant.
 20. **¿Cómo funcionan los recorridos recursivos?** null termina la rama. Inorden visita izq-info-der; preorden info-izq-der; posorden izq-der-info. Cuestan O(n) y O(h) pila Java; una profundidad excesiva puede agotarla.
 21. **¿Qué hace Consumer?** Recibe el dato cuando lo visita el recorrido, en lugar de imprimirlo. Los bucles y llamadas recursivas de la estructura deciden el orden; el callback no construye nodos.
@@ -47,11 +47,11 @@ Desde El umbral recién iniciado, avanzar **cinco veces a la derecha**, dejando 
 
 ## Defensa individual y cambio en vivo (doce minutos)
 
-La profesora reserva doce minutos para preguntas y exige que cualquiera explique estructuras, reglas y código, además de realizar una modificación pequeña. Practicar ambos los 22 puntos anteriores, sin limitar a cada persona a «su parte». Usar la matriz de adaptación académica para relacionar clases y páginas de las presentaciones.
+La profesora reserva doce minutos para preguntas y exige que cualquiera explique estructuras, reglas y código, además de realizar una modificación pequeña. Practicar los tres integrantes los 22 puntos anteriores, sin limitar a cada persona a «su parte». Usar la matriz de adaptación académica para relacionar clases y páginas de las presentaciones.
 
 Ensayo sugerido: cuatro minutos para dibujar enlaces y eliminar un nodo del BST; cuatro para seguir un turno completo y su deshacer; cuatro para una modificación pequeña con compilación y prueba. Por ejemplo, cambiar una etiqueta de la ayuda y verificarla, o añadir un caso límite de una estructura. Este reparto es una propuesta de práctica, no una agenda impuesta por la profesora.
 
-Antes de presentar: confirmar acceso privado de la docente, abrir ambos PDF y el JAR, comprobar el proyector y ensayar con cronómetro. Andrea debe hacer y registrar su contribución real con su propia identidad; no se simulan commits ni se reescribe la autoría existente.
+Antes de presentar: confirmar acceso privado de la docente, abrir ambos PDF y el JAR, comprobar el proyector y ensayar con cronómetro. Cada integrante debe registrar únicamente sus contribuciones reales con su propia identidad; no se simulan commits ni se reescribe la autoría existente.
 
 ## Entrega
 

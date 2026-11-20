@@ -1,6 +1,8 @@
 # Evidencia de validación
 Fecha: 14 noviembre 2026. Plataforma local: Windows 11 x64.
 
+**Nota de autoría vigente (20 de noviembre de 2026):** Los integrantes actuales, según README, son Juan David Paz Rodriguez, José Ángel Lopez Paz y Carolina Diago Fernandez. Las menciones del grupo anterior en auditorías y registros fechados se conservan como evidencia histórica.
+
 ## Pruebas automatizadas ejecutadas
 21 pruebas JUnit: StructuresTest (8), GameEngineTest (7), BreadthFirstSearchTest (4), PlayableLevelsTest (2).
 Resultado verificado en compilación limpia: cero fallos, cero errores, cero omitidas, tanto en Java 21.0.13 como en Java 25.0.5.
@@ -49,7 +51,7 @@ Este apartado actualiza los pendientes históricos anteriores. El PDF original d
 - Se abrió el JAR actual en Windows y se observó inicio de El umbral, cálculo H, laboratorio T y selección de BST con 51 claves. Nueva captura real `docs/screenshots/tecnico-actual.jpg`; ya no divide la clave 74 entre líneas. La captura anterior se conserva como evidencia histórica.
 - Auditoría OpenCode de solo lectura sin hallazgos concretos en su alcance. Respuesta íntegra en [06-opencode-correcciones.md](reviews/06-opencode-correcciones.md). No se presenta como ejecución de pruebas ni inspección visual externa.
 
-Pendientes actuales: contribuciones verificables de ambos integrantes en Git; ensayo y defensa; acceso docente y envío. Integración de la rama en main sujeta a autorización. Siguen pendientes GUI de Linux, detención en breakpoint y recorrido manual exhaustivo; no son sustituidos por CI.
+Pendientes identificados en la auditoría previa: contribuciones verificables de los integrantes registrados entonces en Git; ensayo y defensa; acceso docente y envío. Integración de la rama en main sujeta a autorización. Siguen pendientes GUI de Linux, detención en breakpoint y recorrido manual exhaustivo; no son sustituidos por CI.
 
 ## Adaptación a las presentaciones, 16 de noviembre de 2026
 
