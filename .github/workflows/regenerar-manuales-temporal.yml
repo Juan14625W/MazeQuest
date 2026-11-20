@@ -1,8 +1,9 @@
-name: Regenerar manuales (temporal)
+name: Regenerar manuales PDF
 on:
   push:
     branches:
       - docs/sincronizar-integrantes-grupo
+      - main
 permissions:
   contents: write
 jobs:
@@ -41,7 +42,7 @@ jobs:
           git add output/pdf/manual-usuario.pdf output/pdf/manual-tecnico.pdf
           if ! git diff --cached --quiet; then
             git commit -m "docs: regenerar PDF con integrantes actuales"
-            git push origin HEAD:docs/sincronizar-integrantes-grupo
+            git push origin HEAD:${GITHUB_REF_NAME}
           else
             echo "Los PDF ya están actualizados"
           fi
