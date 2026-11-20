@@ -2,11 +2,11 @@
 
 Fuente principal: «Proyecto final – Estructuras de Datos.pdf», cuatro páginas, entregado por el solicitante y contrastado el 15 de noviembre de 2026. SHA-256: `78140ee7e7d79fa5fe9733a07d7adfe5199cd4c7d8da0e99eceaf0d8b9b76f22`.
 
-Equipo confirmado: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez. Los estados de documentación se apoyan en los archivos de esta rama; no implican que la entrega a la docente o la defensa hayan ocurrido.
+Equipo vigente (según README, actualizado el 20 de noviembre de 2026): Juan David Paz Rodriguez, José Ángel Lopez Paz y Carolina Diago Fernandez. Los estados de documentación se apoyan en los archivos de esta rama; no implican que la entrega a la docente o la defensa hayan ocurrido.
 
 | Requisito de la profesora | Implementación / documento | Evidencia / estado |
 |---|---|---|
-| Grupo de dos o tres; contribuciones de cada integrante | README, historial Git | Dos integrantes confirmados. Pendiente comprobar commits de ambos: el historial auditado solo identificaba a Juan David. No se simula autoría. |
+| Grupo de dos o tres; contribuciones de cada integrante | README, historial Git | Tres integrantes identificados en README. Pendiente comprobar contribuciones reales e individuales de los tres: la auditoría anterior solo había identificado a Juan David. No se simula autoría. |
 | Juego de laberinto, reglas claras, menú y finalización | Levels, GameEngine, GamePanel, manual de usuario | Tres niveles; colisiones, victoria, derrota y entradas inválidas en GameEngineTest y PlayableLevelsTest. Revisión gráfica parcial Windows documentada. |
 | Pila: push, pop, peek, size, isEmpty | structures/CustomStack.java; GameEngine.undo | StructuresTest.stackContract; deshacer turno completo probado en GameEngineTest. |
 | Cola: enqueue, dequeue, peek, size, isEmpty | structures/CustomQueue.java; BreadthFirstSearch | StructuresTest.queueContract y cuatro pruebas BFS. |
