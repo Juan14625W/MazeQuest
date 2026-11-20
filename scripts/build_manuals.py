@@ -152,7 +152,7 @@ def build(name):
     doc = SimpleDocTemplate(str(target), pagesize=A4, rightMargin=48,
                             leftMargin=48, topMargin=55, bottomMargin=49,
                             title=source.read_text(encoding="utf-8").splitlines()[0][2:],
-                            author="Juan David Paz Rodriguez; Andrea Fernanda Sapuyez",
+                            author="Juan David Paz Rodriguez; José Ángel Lopez Paz; Carolina Diago Fernandez",
                             subject="Documentación del proyecto académico")
     doc.build(markdown_flowables(source), canvasmaker=ManualCanvas)
     with pymupdf.open(target) as pdf:
