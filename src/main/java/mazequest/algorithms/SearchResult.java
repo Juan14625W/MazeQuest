@@ -91,9 +91,9 @@ public final class SearchResult {
     StringBuilder b = new StringBuilder();
     java.util.function.IntConsumer action = k -> b.append(k).append(' ');
     switch (order) {
-      case 0 -> visited.inOrder(action);
-      case 1 -> visited.preOrder(action);
-      case 2 -> visited.postOrder(action);
+      case 0 -> visited.inorden(action);
+      case 1 -> visited.preorden(action);
+      case 2 -> visited.posorden(action);
       default -> throw new IllegalArgumentException("Recorrido inválido");
     }
     return b.toString().trim();

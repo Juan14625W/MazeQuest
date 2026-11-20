@@ -113,6 +113,37 @@ class StructuresTest {
     assertNull(l.remove(0));
   }
 
+  /** Dos nodos no son singleton: retirar cabecera conserva el sobreviviente y su ciclo. */
+  @Test
+  void circularTwoNodesAndCursorInvalidation() {
+    CircularLinkedList<Integer> lista = new CircularLinkedList<>();
+    lista.addLast(11);
+    lista.addLast(8);
+    var antiguo = lista.cursor();
+    assertEquals(11, lista.remove(0));
+    assertEquals(1, lista.size());
+    var sobreviviente = lista.cursor();
+    for (int i = 0; i < 4; i++) {
+      assertEquals(8, sobreviviente.value());
+      sobreviviente.advance();
+      assertEquals(0, sobreviviente.index());
+    }
+    assertThrows(ConcurrentModificationException.class, antiguo::value);
+    assertThrows(ConcurrentModificationException.class, antiguo::advance);
+    assertThrows(ConcurrentModificationException.class, antiguo::index);
+    assertThrows(ConcurrentModificationException.class, () -> antiguo.seek(0));
+    lista.addFirst(23);
+    assertEquals(8, lista.remove(1));
+    assertEquals(0, lista.indexOf(23));
+    assertEquals(-1, lista.indexOf(8));
+    assertEquals(23, lista.remove(0));
+    StringBuilder recorrido = new StringBuilder();
+    lista.forEach(recorrido::append);
+    assertEquals("", recorrido.toString());
+    lista.addLast(17);
+    assertEquals(17, lista.get(0));
+  }
+
   /** Usa ambos recorridos para detectar enlaces prev o next rotos. */
   @Test
   void doublyLinks() {
@@ -150,6 +181,30 @@ class StructuresTest {
     assertNull(l.remove(0));
     assertThrows(IndexOutOfBoundsException.class, () -> l.insert(1, 1));
     assertThrows(IndexOutOfBoundsException.class, () -> l.remove(-1));
+  }
+
+  /** Quitar cabecera debe limpiar el enlace anterior; quitar último debe limpiar el siguiente. */
+  @Test
+  void doublyEndpointsAfterRemoval() {
+    DoublyLinkedList<Integer> lista = new DoublyLinkedList<>();
+    lista.addLast(11);
+    lista.addLast(8);
+    assertEquals(11, lista.remove(0));
+    StringBuilder atras = new StringBuilder();
+    lista.forEachReverse(atras::append);
+    assertEquals("8", atras.toString());
+    lista.addFirst(23);
+    assertEquals(8, lista.remove(1));
+    StringBuilder adelante = new StringBuilder();
+    lista.forEach(adelante::append);
+    assertEquals("23", adelante.toString());
+    assertEquals(23, lista.remove(0));
+    assertTrue(lista.isEmpty());
+    lista.addLast(17);
+    lista.addFirst(10);
+    atras.setLength(0);
+    lista.forEachReverse(v -> atras.append(v).append(" "));
+    assertEquals("17 10 ", atras.toString());
   }
 
   /** Comprueba secuencias exactas y duplicados ignorados. */
@@ -194,13 +249,42 @@ class StructuresTest {
     assertTrue(t.contains(2));
   }
 
-  /** Un árbol degenerado sigue siendo válido y sus recorridos no son recursivos. */
+  /** Reproduce el árbol de la página 10 de Árboles y sus tres órdenes exactos. */
+  @Test
+  void classroomTreeTraversals() {
+    BinarySearchTree arbol = new BinarySearchTree();
+    for (int dato : new int[] {10, 5, 12, 3, 7, 11, 15}) {
+      assertTrue(arbol.insertar(dato));
+    }
+    assertFalse(arbol.insertar(10));
+    StringBuilder in = new StringBuilder(), pre = new StringBuilder(), pos = new StringBuilder();
+    arbol.inorden(dato -> in.append(dato).append(" "));
+    arbol.preorden(dato -> pre.append(dato).append(" "));
+    arbol.posorden(dato -> pos.append(dato).append(" "));
+    assertEquals("3 5 7 10 11 12 15 ", in.toString());
+    assertEquals("10 5 3 7 12 11 15 ", pre.toString());
+    assertEquals("3 7 5 11 15 12 10 ", pos.toString());
+    assertTrue(arbol.buscar(11));
+    assertTrue(arbol.eliminar(10));
+    assertFalse(arbol.buscar(10));
+    in.setLength(0);
+    arbol.inorden(dato -> in.append(dato).append(" "));
+    assertEquals("3 5 7 11 12 15 ", in.toString());
+  }
+
+  /** Conserva el caso de 2000 nodos y ejercita los tres recorridos recursivos en la JVM usada. */
   @Test
   void degenerateTree() {
     BinarySearchTree t = new BinarySearchTree();
     for (int i = 0; i < 2000; i++) t.insert(i);
     int[] count = {0};
     t.postOrder(k -> count[0]++);
+    assertEquals(2000, count[0]);
+    count[0] = 0;
+    t.inOrder(k -> count[0]++);
+    assertEquals(2000, count[0]);
+    count[0] = 0;
+    t.preOrder(k -> count[0]++);
     assertEquals(2000, count[0]);
     assertTrue(t.remove(1000));
     assertEquals(1999, t.size());
