@@ -82,6 +82,8 @@ Entrega indicada: 20 de noviembre de 2026, 18:00, America/Bogota.
 ## Autoría
 
 - Juan David Paz Rodriguez.
+- José Ángel Lopez Paz
+- Carolina Diago Fernandez 
 
 Equipo académico confirmado por el solicitante. La identidad de Git se conserva: indicar el equipo no demuestra contribuciones de ambos en el historial. Desarrollo asistido por Codex; las revisiones reales de OpenCode están identificadas en `docs/reviews/`.
 
