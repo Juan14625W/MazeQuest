@@ -1,6 +1,6 @@
 # Adaptación académica de las estructuras
 
-Fecha: 16 de noviembre de 2026. Equipo: Juan David Paz Rodriguez y Andrea Fernanda Sapuyez.
+Fecha de adaptación técnica: 16 de noviembre de 2026. Equipo vigente (actualización del 20 de noviembre): Juan David Paz Rodriguez, José Ángel Lopez Paz y Carolina Diago Fernandez.
 
 La revisión inicial no encontró operaciones obligatorias ausentes ni algoritmos incorrectos por usar nombres ingleses. La adaptación hace explícitos nodos, enlaces y casos límite, y cambia los recorridos del BST a recursividad conforme a la solicitud. Se conserva el videojuego existente.
 
